@@ -1,0 +1,82 @@
+[
+  {
+    "Id": 3,
+    "Vendor": "Volqa",
+    "Model": "Qaz31105",
+    "Year": 2006,
+    "Price": 13231,
+    "Color": null
+  },
+  {
+    "Id": 9,
+    "Vendor": "lmn",
+    "Model": "lmn",
+    "Year": 2022,
+    "Price": 79654,
+    "Color": null
+  },
+  {
+    "Id": 10,
+    "Vendor": "07",
+    "Model": "07",
+    "Year": 2022,
+    "Price": 78653,
+    "Color": null
+  },
+  {
+    "Id": 11,
+    "Vendor": "sdfaf",
+    "Model": "asfdf",
+    "Year": 2022,
+    "Price": 98762,
+    "Color": null
+  },
+  {
+    "Id": 12,
+    "Vendor": "CHEVROLET",
+    "Model": "CAMORO",
+    "Year": 2022,
+    "Price": 87664,
+    "Color": null
+  },
+  {
+    "Id": 13,
+    "Vendor": "Toyota",
+    "Model": "Prado",
+    "Year": 2014,
+    "Price": 98876,
+    "Color": null
+  },
+  {
+    "Id": 14,
+    "Vendor": "Vaz",
+    "Model": "07",
+    "Year": 1999,
+    "Price": 80383,
+    "Color": null
+  },
+  {
+    "Id": 10,
+    "Vendor": "07",
+    "Model": "07",
+    "Year": 2022,
+    "Price": 34565,
+    "Color": null
+  },
+  {
+    "Id": 15,
+    "Vendor": "simple",
+    "Model": "simple",
+    "Year": 2008,
+    "Price": 2323,
+    "Color": "reddd"
+  },
+  {
+    "Id": 16,
+    "Vendor": "BMW",
+    "Model": "e46",
+    "Year": 2003,
+    "Price": 11000,
+    "Color": "Black"
+  }
+]

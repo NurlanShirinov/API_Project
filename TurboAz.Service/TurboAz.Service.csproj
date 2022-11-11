@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NetCore.AutoRegisterDi" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TurboAz.Core\TurboAz.Core.csproj" />
+    <ProjectReference Include="..\TurboAz.Repository\TurboAz.Repository.csproj" />
+  </ItemGroup>
+
+</Project>
