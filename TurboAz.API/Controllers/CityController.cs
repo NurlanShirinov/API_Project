@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TurboAz.Core.Models;
 using TurboAz.Service.Services.Abstract;
 
 namespace TurboAz.API.Controllers
@@ -15,10 +16,37 @@ namespace TurboAz.API.Controllers
             _cityService = cityService;
         }
 
-        [HttpGet("GetAllCities")]
+        [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
             var res = _cityService.GetAll();
+            return Ok(res);
+        }
+        [HttpGet("GetById")]
+        public IActionResult GetById(int id)
+        {
+            var res = _cityService.GetById(id);
+            return Ok(res);
+        }
+
+        [HttpDelete("DeleteCity")]
+        public IActionResult Delete(int id)
+        {
+            var res = _cityService.Delete(id);
+            return Ok(res);
+        }
+
+        [HttpPost("AddCity")]
+        public IActionResult Add(City city)
+        {
+            var res = _cityService.AddCity(city);
+            return Ok(res);
+        }
+
+        [HttpPut("UpdateCity")]
+        public IActionResult Update(City city)
+        {
+            var res = _cityService.Update(city);
             return Ok(res);
         }
     }

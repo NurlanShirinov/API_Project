@@ -54,6 +54,7 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
                 latestRecord.Model = car.Model;
                 latestRecord.Year = car.Year;
                 latestRecord.Price = car.Price;
+                latestRecord.Vendor = car.Vendor;
             }
             _unitOfWork.WriteToJson(carList);
             return latestRecord;

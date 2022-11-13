@@ -11,6 +11,11 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
     public class CityCommand : ICityCommand
     {
         private readonly IUnitOfWork<City> _unitOfWork;
+        public CityCommand(IUnitOfWork<City> unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
         public int AddCity(City city)
         {
             var cityList = _unitOfWork.DeserializeFromJson<City>();
@@ -31,8 +36,9 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
         public bool DeleteCity(int id)
         {
             var cityList = _unitOfWork.DeserializeFromJson<City>();
-            var currentCity=cityList.OrderByDescending(i => i.Id).FirstOrDefault();
+            var currentCity=cityList.OrderByDescending(i => i.Id==id).FirstOrDefault();
             var result = cityList.Remove(currentCity);
+            _unitOfWork.WriteToJson(cityList);
             return result;
         }
 

@@ -12,9 +12,10 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
     {
 
         private readonly IUnitOfWork<City> _unitOfWork;
+
         public CityQuery(IUnitOfWork<City> unitOfWork)
         {
-            unitOfWork = _unitOfWork;
+            _unitOfWork = unitOfWork;
         }
 
         public IEnumerable<City> GetAll()
