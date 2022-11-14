@@ -37,14 +37,14 @@ namespace TurboAz.API.Controllers
         }
 
         [HttpPost("Update")]
-        public IActionResult Update(Category category)
+        public IActionResult Update([FromBody]Category category)
         {
             var res = _categoryService.UpdateCategory(category);
             return Ok(res);
         }
 
         [HttpDelete("Delete")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete([FromQuery] int id)
         {
             var res = _categoryService.DeleteCategory(id);
             return Ok(res);

@@ -9,7 +9,7 @@ using TurboAz.Service.Services.Abstract;
 
 namespace TurboAz.Service.Services.Concrete
 {
-    internal class CategoryService : ICategoryService
+    public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
 

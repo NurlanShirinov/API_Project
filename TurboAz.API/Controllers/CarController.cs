@@ -25,7 +25,7 @@ namespace TurboAz.API.Controllers
         }
 
         [HttpGet("GetById")]
-        public IActionResult GetByID(int id)
+        public IActionResult GetByID([FromQuery] int id)
         {
             var res = _carService.GetById(id);
             return Ok(res);
@@ -33,21 +33,21 @@ namespace TurboAz.API.Controllers
 
 
         [HttpPost("AddCar")]
-        public IActionResult AddCar(Car car)
+        public IActionResult AddCar([FromBody] Car car)
         {
             var res = _carService.AddCar(car);
             return Ok(res);
         }
 
         [HttpDelete("DeleteCar")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete([FromQuery] int id)
         {
             var res = _carService.DeleteCar(id);
             return Ok(res);
         }
 
         [HttpPut("UpdateCar")]
-        public IActionResult Update(Car car)
+        public IActionResult Update([FromBody] Car car)
         {
             var res = _carService.UpdateCar(car);
             return Ok(res);

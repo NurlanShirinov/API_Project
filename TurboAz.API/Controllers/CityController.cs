@@ -22,29 +22,30 @@ namespace TurboAz.API.Controllers
             var res = _cityService.GetAll();
             return Ok(res);
         }
+
         [HttpGet("GetById")]
-        public IActionResult GetById(int id)
+        public IActionResult GetById([FromQuery]int id)
         {
             var res = _cityService.GetById(id);
             return Ok(res);
         }
 
         [HttpDelete("DeleteCity")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete([FromQuery]int id)
         {
             var res = _cityService.Delete(id);
             return Ok(res);
         }
 
         [HttpPost("AddCity")]
-        public IActionResult Add(City city)
+        public IActionResult Add([FromBody]City city)
         {
             var res = _cityService.AddCity(city);
             return Ok(res);
         }
 
         [HttpPut("UpdateCity")]
-        public IActionResult Update(City city)
+        public IActionResult Update([FromBody]City city)
         {
             var res = _cityService.Update(city);
             return Ok(res);
