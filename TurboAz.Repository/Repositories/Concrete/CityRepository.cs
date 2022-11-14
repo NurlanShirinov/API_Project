@@ -21,33 +21,33 @@ namespace TurboAz.Repository.Repositories.Concrete
             _cityQuery = cityQuery;
         }
 
-        public int AddCity(City city)
+        public async Task<int> AddCity(City city)
         {
-            var res = _cityCommand.AddCity(city);
+            var res = await _cityCommand.AddCity(city);
             return res;
         }
 
-        public bool DeleteCity(int id)
+        public async Task<bool> DeleteCity(int id)
         {
-            var res = _cityCommand.DeleteCity(id);
+            var res =await _cityCommand.DeleteCity(id);
             return res;
         }
 
-        public IEnumerable<City> GetAllCities()
+        public async Task<IEnumerable<City>> GetAll()
         {
-            var result = _cityQuery.GetAll();
+            var result = await _cityQuery.GetAll();
             return result;
         }
 
-        public City GetById(int id)
+        public async Task<City> UpdateCity(City city)
         {
-            var res = _cityQuery.GetById(id);
+            var res = await _cityCommand.UpdateCity(city);
             return res;
         }
 
-        public City UpdateCity(City city)
+        public async Task<City> GetById(int id)
         {
-            var res = _cityCommand.UpdateCity(city);
+            var res =await _cityQuery.GetById(id);
             return res;
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,24 +12,46 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
     public class CityQuery : ICityQuery
     {
 
-        private readonly IUnitOfWork<City> _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CityQuery(IUnitOfWork<City> unitOfWork)
+        public CityQuery(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<City> GetAll()
+        private string getAllSql = $@"SElECT * FROM CITIES";
+
+        private string getByIdSql = $@"SELECT * FROM CITIES WHERE ID = @id";
+
+        public async Task<IEnumerable<City>> GetAll()
         {
-            var result = _unitOfWork.DeserializeFromJson<City>();
-            return result;
+            try
+            {
+                var data = await _unitOfWork.GetConnection().QueryAsync<City>(getAllSql, null, _unitOfWork.GetTransaction());
+                
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public City GetById(int id)
+        public async Task<City> GetById(int id)
         {
-            var cityList = _unitOfWork.DeserializeFromJson<City>();
-            var currentCity = cityList.FirstOrDefault(i=>i.Id==id);
-            return currentCity;
+            var param = new
+            {
+                id
+            };
+            try
+            {
+                var result = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<City>(getByIdSql, param, _unitOfWork.GetTransaction());
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

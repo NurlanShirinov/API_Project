@@ -9,10 +9,10 @@ namespace TurboAz.Repository.Repositories.Abstract
 {
     public interface ICityRepository
     {
-        int AddCity(City city);
-        bool DeleteCity(int id);
-        City UpdateCity(City city);
-        IEnumerable<City> GetAllCities();
-        City GetById(int id);
+        Task<int> AddCity(City city);
+        Task<bool> DeleteCity(int id);
+        Task<City> UpdateCity(City city);
+        Task<IEnumerable<City>> GetAll();
+        Task<City> GetById(int id);
     }
 }

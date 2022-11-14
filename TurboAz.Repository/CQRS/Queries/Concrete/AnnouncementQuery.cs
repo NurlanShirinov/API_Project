@@ -11,9 +11,9 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
 {
     public class AnnouncementQuery: IAnnouncementQuery
     {
-        private readonly IUnitOfWork<Announcement> _unitOfWork;
+        private readonly IUnitOfWork1<Announcement> _unitOfWork;
 
-        public AnnouncementQuery(IUnitOfWork<Announcement> unitOfWork)
+        public AnnouncementQuery(IUnitOfWork1<Announcement> unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

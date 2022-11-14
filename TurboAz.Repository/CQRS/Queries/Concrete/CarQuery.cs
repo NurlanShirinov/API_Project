@@ -10,9 +10,9 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
 {
     public class CarQuery : ICarQuery
     {
-        private readonly IUnitOfWork<Car> _unitOfWork;
+        private readonly IUnitOfWork1<Car> _unitOfWork;
 
-        public CarQuery(IUnitOfWork<Car> unitOfWork)
+        public CarQuery(IUnitOfWork1<Car> unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

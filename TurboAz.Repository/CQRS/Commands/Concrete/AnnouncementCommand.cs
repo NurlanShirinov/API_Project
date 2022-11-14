@@ -10,9 +10,9 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
 {
     public class AnnouncementCommand : IAnnouncementCommand
     {
-        private readonly IUnitOfWork<Announcement> _unitOfWork;
+        private readonly IUnitOfWork1<Announcement> _unitOfWork;
 
-        public AnnouncementCommand(IUnitOfWork<Announcement> unitOfWork)
+        public AnnouncementCommand(IUnitOfWork1<Announcement> unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

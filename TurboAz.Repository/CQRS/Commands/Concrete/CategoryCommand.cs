@@ -10,9 +10,9 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
 {
     public class CategoryCommand : ICategoryCommand
     {
-        private readonly IUnitOfWork<Category> _unitOfWork;
+        private readonly IUnitOfWork1<Category> _unitOfWork;
 
-        public CategoryCommand(IUnitOfWork<Category> unitOfWork)
+        public CategoryCommand(IUnitOfWork1<Category> unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

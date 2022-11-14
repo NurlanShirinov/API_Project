@@ -9,7 +9,7 @@ namespace TurboAz.Repository.CQRS.Queries.Abstract
 {
     public interface ICityQuery
     {
-        IEnumerable<City> GetAll();
-        City GetById(int id); 
+        Task<IEnumerable<City>> GetAll();
+        Task<City> GetById(int id);
     }
 }

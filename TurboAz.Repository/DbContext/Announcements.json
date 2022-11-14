@@ -1,1 +1,89 @@
-[{"Id":0,"CreatedDate":"2022-11-14T12:41:33.9712137+04:00","AnnouncemenNumber":1,"AnnouncedCarId":1,"AnnouncedCar":{"Id":0,"Vendor":"ttt","Model":"string","Year":0,"Price":0,"Color":"string"},"AnnouncedCityId":1,"AnnouncedCity":{"Id":0,"Name":"string"},"AnnouncedCarCategoryId":1,"AnnouncedCarCategory":{"Id":1,"Name":"Sub"},"Price":5.0,"ViewCount":0,"IsActive":true,"IsVip":true,"AnnouncementDeadline":"2022-12-05T00:00:00"},{"Id":1,"CreatedDate":"2022-11-14T06:28:07.158Z","AnnouncemenNumber":10,"AnnouncedCarId":5,"AnnouncedCar":{"Id":0,"Vendor":"Bugatti","Model":"Bugatti","Year":2022,"Price":28783,"Color":"Blue"},"AnnouncedCityId":0,"AnnouncedCity":{"Id":0,"Name":"Lenkeran"},"AnnouncedCarCategoryId":0,"AnnouncedCarCategory":{"Id":0,"Name":"string"},"Price":8.0,"ViewCount":0,"IsActive":true,"IsVip":true,"AnnouncementDeadline":"2022-11-14T06:28:07.158Z"},{"Id":2,"CreatedDate":"2022-11-14T08:41:46.237Z","AnnouncemenNumber":0,"AnnouncedCarId":0,"AnnouncedCar":{"Id":0,"Vendor":"Yeni","Model":"string","Year":0,"Price":0,"Color":"string"},"AnnouncedCityId":0,"AnnouncedCity":{"Id":0,"Name":"string"},"AnnouncedCarCategoryId":0,"AnnouncedCarCategory":{"Id":0,"Name":"string"},"Price":0.0,"ViewCount":0,"IsActive":true,"IsVip":true,"AnnouncementDeadline":"2022-11-14T08:41:46.237Z"}]
+[
+  {
+    "Id": 0,
+    "CreatedDate": "2022-11-14T12:41:33.9712137+04:00",
+    "AnnouncemenNumber": 1,
+    "AnnouncedCarId": 1,
+    "AnnouncedCar": {
+      "Id": 0,
+      "Vendor": "ttt",
+      "Model": "string",
+      "Year": 0,
+      "Price": 0,
+      "Color": "string"
+    },
+    "AnnouncedCityId": 1,
+    "AnnouncedCity": {
+      "Id": 0,
+      "Name": "string"
+    },
+    "AnnouncedCarCategoryId": 1,
+    "AnnouncedCarCategory": {
+      "Id": 1,
+      "Name": "Sub"
+    },
+    "Price": 5.0,
+    "ViewCount": 0,
+    "IsActive": true,
+    "IsVip": true,
+    "AnnouncementDeadline": "2022-12-05T00:00:00"
+  },
+  {
+    "Id": 1,
+    "CreatedDate": "2022-11-14T06:28:07.158Z",
+    "AnnouncemenNumber": 10,
+    "AnnouncedCarId": 5,
+    "AnnouncedCar": {
+      "Id": 0,
+      "Vendor": "Bugatti",
+      "Model": "Bugatti",
+      "Year": 2022,
+      "Price": 28783,
+      "Color": "Blue"
+    },
+    "AnnouncedCityId": 0,
+    "AnnouncedCity": {
+      "Id": 0,
+      "Name": "Lenkeran"
+    },
+    "AnnouncedCarCategoryId": 0,
+    "AnnouncedCarCategory": {
+      "Id": 0,
+      "Name": "string"
+    },
+    "Price": 8.0,
+    "ViewCount": 0,
+    "IsActive": true,
+    "IsVip": true,
+    "AnnouncementDeadline": "2022-11-14T06:28:07.158Z"
+  },
+  {
+    "Id": 2,
+    "CreatedDate": "2022-11-14T08:41:46.237Z",
+    "AnnouncemenNumber": 0,
+    "AnnouncedCarId": 0,
+    "AnnouncedCar": {
+      "Id": 0,
+      "Vendor": "Yeni",
+      "Model": "string",
+      "Year": 0,
+      "Price": 0,
+      "Color": "string"
+    },
+    "AnnouncedCityId": 0,
+    "AnnouncedCity": {
+      "Id": 0,
+      "Name": "string"
+    },
+    "AnnouncedCarCategoryId": 0,
+    "AnnouncedCarCategory": {
+      "Id": 0,
+      "Name": "string"
+    },
+    "Price": 0.0,
+    "ViewCount": 0,
+    "IsActive": true,
+    "IsVip": true,
+    "AnnouncementDeadline": "2022-11-14T08:41:46.237Z"
+  }
+]

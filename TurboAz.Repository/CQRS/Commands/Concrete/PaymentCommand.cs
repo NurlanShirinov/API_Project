@@ -10,9 +10,9 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
 {
     public class PaymentCommand:IPaymentCommand
     {
-        private readonly IUnitOfWork<Payment> _unitOfWork;
+        private readonly IUnitOfWork1<Payment> _unitOfWork;
 
-        public PaymentCommand(IUnitOfWork<Payment> unitOfWork)
+        public PaymentCommand(IUnitOfWork1<Payment> unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

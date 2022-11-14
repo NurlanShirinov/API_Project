@@ -1,50 +1,83 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 
-public interface IUnitOfWork<T> where T : class
+public interface IUnitOfWork : IDisposable
 {
-    public List<T> DeserializeFromJson<T>();
-    public void WriteToJson(List<T> list);
+    SqlTransaction BeginTransaction();
+    SqlConnection GetConnection();
+    SqlTransaction GetTransaction();
+    void SaveChanges();
 }
 
-public class UnitOfWork<T> : IUnitOfWork<T> where T : class
+public class UnitOfWork : IUnitOfWork
 {
-    private const string _dataSource = $@"C:\Users\User\source\repos\TurboAz\TurboAz.Repository\DbContext\[FileName]s.json";
-    public List<T> DeserializeFromJson<T>()
+    private readonly string _connectionString;
+    private bool disposed = false;
+
+    private SqlTransaction sqlTransaction;
+    private SqlConnection sqlConnection;
+
+
+    public UnitOfWork(IConfiguration configuration)
     {
-        var tmpTypeName = typeof(T).Name;
-        string jsonFilePath = "";
-
-        if (tmpTypeName.LastOrDefault().ToString() == "y")
-        {
-            tmpTypeName = tmpTypeName.Remove(tmpTypeName.Length - 1);
-            tmpTypeName += "ie";
-            jsonFilePath = _dataSource.Replace("[FileName]", tmpTypeName);
-        }
-        else
-        {
-            jsonFilePath = _dataSource.Replace("[FileName]", typeof(T).Name);
-        }
-
-        string json = File.ReadAllText(jsonFilePath);
-        var itemList = JsonConvert.DeserializeObject<List<T>>(json);
-        return itemList;
+        _connectionString = configuration.GetConnectionString("DefaultConnection");
+        sqlConnection = new SqlConnection(_connectionString);
     }
-    public void WriteToJson(List<T> list)
+
+    public SqlTransaction BeginTransaction()
     {
-        var tempTypeName = typeof(T).Name;
-        string jsonFilePath = "";
+        if (sqlConnection.State != System.Data.ConnectionState.Open)
+        {
+            sqlConnection.Open();
+            sqlTransaction = sqlConnection.BeginTransaction();
+        }
 
-        if (tempTypeName.LastOrDefault().ToString() == "y")
-        {
-            tempTypeName = tempTypeName.Remove(tempTypeName.Length - 1);
-            tempTypeName += "ie";
-            jsonFilePath = _dataSource.Replace("[FileName]", tempTypeName);
-        }
-        else
-        {
-            jsonFilePath = _dataSource.Replace("[FileName]", typeof(T).Name);
-        }
-        var newJson = JsonConvert.SerializeObject(list);
-        File.WriteAllText(jsonFilePath, newJson);
+        return sqlTransaction;
     }
+
+    public SqlConnection GetConnection()
+    {
+        return sqlConnection;
+    }
+
+    public SqlTransaction GetTransaction()
+    {
+        return sqlTransaction;
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        //GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposed)
+        {
+            if (disposing)
+            {
+                sqlTransaction = null;
+            }
+
+            // Release unmanaged resources.
+            if (sqlConnection.State == System.Data.ConnectionState.Open)
+            {
+                sqlConnection.Close();
+            }
+            disposed = true;
+        }
+    }
+
+
+    public void SaveChanges()
+    {
+        sqlTransaction.Commit();
+        sqlConnection.Close();
+        sqlTransaction = null;
+    }
+
+    ~UnitOfWork() { Dispose(false); }
 }

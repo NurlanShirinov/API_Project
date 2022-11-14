@@ -30,7 +30,8 @@ namespace TurboAz.API.Infrastructure
                 .Where(c => c.Name.EndsWith("Service"))
                 .AsPublicImplementedInterfaces(ServiceLifetime.Scoped);
 
-            services.AddSingleton(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
+            services.AddSingleton<IUnitOfWork, UnitOfWork>();
+            services.AddSingleton(typeof(IUnitOfWork1<>), typeof(UnitOfWork1<>));
 
             return services;
         }

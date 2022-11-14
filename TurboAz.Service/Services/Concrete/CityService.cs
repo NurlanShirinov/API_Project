@@ -19,34 +19,35 @@ namespace TurboAz.Service.Services.Concrete
         }
 
 
-        public int AddCity(City city)
+        public async Task<int> AddCity(City city)
         {
-            var res = _cityRepository.AddCity(city);
+            var res = await _cityRepository.AddCity(city);
             return res;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var res = _cityRepository.DeleteCity(id);
+            var res = await _cityRepository.DeleteCity(id);
             return res;
         }
 
-        public IEnumerable<City> GetAll()
+        public async Task<IEnumerable<City>> GetAll()
         {
-           var res = _cityRepository.GetAllCities();
+           var res =await _cityRepository.GetAll();
             return res;
         }
 
-        public City GetById(int id)
+        public async Task<City> GetById(int id)
         {
-            var res = _cityRepository.GetById(id);
+            var res = await _cityRepository.GetById(id);
             return res;
         }
 
-        public City Update(City city)
+        public async Task<City> Update(City city)
         {
-            var res = _cityRepository.UpdateCity(city);
+            var res =await _cityRepository.UpdateCity(city);
             return res;
         }
+
     }
 }

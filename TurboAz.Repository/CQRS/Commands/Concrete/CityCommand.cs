@@ -1,57 +1,73 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
 using TurboAz.Repository.CQRS.Commands.Abstract;
+using static Dapper.SqlMapper;
 
 namespace TurboAz.Repository.CQRS.Commands.Concrete
 {
     public class CityCommand : ICityCommand
     {
-        private readonly IUnitOfWork<City> _unitOfWork;
-        public CityCommand(IUnitOfWork<City> unitOfWork)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public CityCommand(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public int AddCity(City city)
+        private string _addSql = $@"INSERT INTO CITIES(Id,[Name])
+                                    VALUES(@{nameof(City.Id)},
+                                           @{nameof(City.Name)})";
+
+        private string _updateSql = $@"UPDATE CITIES 
+                                       SET Name = @name
+                                       WHERE Id = @id";
+
+        private string _deleteSql = $@"DELETE FROM CITIES WHERE Id = @id";
+
+        public async Task<int> AddCity(City city)
         {
-            var cityList = _unitOfWork.DeserializeFromJson<City>();
-            var currentCity = cityList.OrderByDescending(i => i.Id).FirstOrDefault();
-            if (currentCity is null)
+            try
             {
-                city.Id = 0;
+                var result = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<int>(_addSql, city, _unitOfWork.GetTransaction());
+                return result;
             }
-            else
+            catch (Exception e)
             {
-                city.Id = currentCity.Id = 1;
+                throw e;
             }
-            cityList.Add(city);
-            _unitOfWork.WriteToJson(cityList);
-            return city.Id;
         }
 
-        public bool DeleteCity(int id)
+        public async Task<bool> DeleteCity(int id)
         {
-            var cityList = _unitOfWork.DeserializeFromJson<City>();
-            var currentCity=cityList.OrderByDescending(i => i.Id==id).FirstOrDefault();
-            var result = cityList.Remove(currentCity);
-            _unitOfWork.WriteToJson(cityList);
-            return result;
+            try
+            {
+                var param = new { id };
+                await _unitOfWork.GetConnection().QueryAsync(_deleteSql, param, _unitOfWork.GetTransaction());
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                return false;
+            }
         }
 
-        public City UpdateCity(City city)
+        public async Task<City> UpdateCity(City city)
         {
-            var cityList = _unitOfWork.DeserializeFromJson<City>();
-            var currentCity = cityList.OrderByDescending(i => i.Id == city.Id).FirstOrDefault();
-            if(currentCity is not null)
+            try
             {
-                currentCity.Name = city.Name;
+                await _unitOfWork.GetConnection().QueryAsync(_updateSql, city, _unitOfWork.GetTransaction());
+                return city;
             }
-            _unitOfWork.WriteToJson(cityList);
-            return currentCity;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

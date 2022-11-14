@@ -17,37 +17,37 @@ namespace TurboAz.API.Controllers
         }
 
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var res = _cityService.GetAll();
+            var res = await _cityService.GetAll();
             return Ok(res);
         }
 
         [HttpGet("GetById")]
-        public IActionResult GetById([FromQuery]int id)
+        public async Task<IActionResult> GetById([FromQuery] int id)
         {
-            var res = _cityService.GetById(id);
+            var res = await _cityService.GetById(id);
             return Ok(res);
         }
 
         [HttpDelete("DeleteCity")]
-        public IActionResult Delete([FromQuery]int id)
+        public async Task<IActionResult> Delete([FromQuery] int id)
         {
-            var res = _cityService.Delete(id);
+            var res = await _cityService.Delete(id);
             return Ok(res);
         }
 
         [HttpPost("AddCity")]
-        public IActionResult Add([FromBody]City city)
+        public async Task<IActionResult> Add([FromBody] City city)
         {
-            var res = _cityService.AddCity(city);
+            var res = await _cityService.AddCity(city);
             return Ok(res);
         }
 
         [HttpPut("UpdateCity")]
-        public IActionResult Update([FromBody]City city)
+        public async Task<IActionResult> Update([FromBody] City city)
         {
-            var res = _cityService.Update(city);
+            var res = await _cityService.Update(city);
             return Ok(res);
         }
     }

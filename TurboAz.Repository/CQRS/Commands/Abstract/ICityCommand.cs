@@ -9,8 +9,8 @@ namespace TurboAz.Repository.CQRS.Commands.Abstract
 {
     public interface ICityCommand
     {
-        int AddCity(City city);
-        bool DeleteCity(int id);
-        City UpdateCity(City city);
+        Task<int> AddCity(City city);
+        Task<bool> DeleteCity(int id);
+        Task<City> UpdateCity(City city);
     }
 }

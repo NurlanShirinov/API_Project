@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurboAz.API", "TurboAz.API\TurboAz.API.csproj", "{908B700E-EB6C-4642-B47B-989ED8028E30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurboAz.API", "TurboAz.API\TurboAz.API.csproj", "{908B700E-EB6C-4642-B47B-989ED8028E30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurboAz.Core", "TurboAz.Core\TurboAz.Core.csproj", "{1ACEE93C-26FC-4474-9971-B9C282D503C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurboAz.Core", "TurboAz.Core\TurboAz.Core.csproj", "{1ACEE93C-26FC-4474-9971-B9C282D503C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurboAz.Repository", "TurboAz.Repository\TurboAz.Repository.csproj", "{2F9D2FE2-63C4-4302-8187-2DEF55789EC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurboAz.Repository", "TurboAz.Repository\TurboAz.Repository.csproj", "{2F9D2FE2-63C4-4302-8187-2DEF55789EC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurboAz.Service", "TurboAz.Service\TurboAz.Service.csproj", "{3004992C-9F06-4524-B14B-80F5F3AEF175}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurboAz.Service", "TurboAz.Service\TurboAz.Service.csproj", "{3004992C-9F06-4524-B14B-80F5F3AEF175}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -10,9 +10,9 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
 {
     public class CategoryQuery : ICategoryQuery
     {
-        public readonly IUnitOfWork<Category> _unitOfWork;
+        public readonly IUnitOfWork1<Category> _unitOfWork;
 
-        public CategoryQuery(IUnitOfWork<Category> unitOfWork)
+        public CategoryQuery(IUnitOfWork1<Category> unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

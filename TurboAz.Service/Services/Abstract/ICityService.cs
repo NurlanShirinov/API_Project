@@ -9,11 +9,11 @@ namespace TurboAz.Service.Services.Abstract
 {
     public interface ICityService
     {
-        City GetById(int id);
-        IEnumerable<City> GetAll();
-        int AddCity(City city);
-        City Update(City city);
-        bool Delete(int id); 
+        Task<IEnumerable<City>> GetAll();
+        Task<City> GetById(int id);
+        Task<int> AddCity(City city);
+        Task<City> Update(City city);
+        Task<bool> Delete(int id); 
 
     }
 }

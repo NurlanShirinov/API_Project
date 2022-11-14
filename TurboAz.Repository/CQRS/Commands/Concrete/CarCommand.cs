@@ -10,9 +10,9 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
 {
     public class CarCommand : ICarCommand
     {
-        private readonly IUnitOfWork<Car> _unitOfWork;
+        private readonly IUnitOfWork1<Car> _unitOfWork;
 
-        public CarCommand(IUnitOfWork<Car> unitOfWork)
+        public CarCommand(IUnitOfWork1<Car> unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
