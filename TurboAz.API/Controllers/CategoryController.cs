@@ -15,7 +15,6 @@ namespace TurboAz.API.Controllers
             _categoryService = categoryService;
         }
 
-
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {

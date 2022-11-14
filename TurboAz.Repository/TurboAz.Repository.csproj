@@ -15,4 +15,6 @@
     <ProjectReference Include="..\TurboAz.Core\TurboAz.Core.csproj" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties dbcontext_4categories_1json__JsonSchema="https://geojson.org/schema/GeoJSON.json" /></VisualStudio></ProjectExtensions>
+
 </Project>
