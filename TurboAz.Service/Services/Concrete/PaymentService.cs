@@ -4,22 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
+using TurboAz.Repository.Repositories.Abstract;
 using TurboAz.Service.Services.Abstract;
 
 namespace TurboAz.Service.Services.Concrete
 {
     public class PaymentService : IPaymentService
     {
-        private readonly IPaymentService _paymentService;
+        private readonly IPaymentRepository _paymentRepository;
 
-        public PaymentService(IPaymentService paymentService)
+        public PaymentService(IPaymentRepository paymentRepository)
         {
-            _paymentService = paymentService;
+            _paymentRepository = paymentRepository;
         }
-
         public bool Pay(CardNumber cardNumber, Email email)
         {
-            var res = _paymentService.Pay(cardNumber,email);
+            var res = _paymentRepository.Pay(cardNumber,email);
             return res;
         }
     }

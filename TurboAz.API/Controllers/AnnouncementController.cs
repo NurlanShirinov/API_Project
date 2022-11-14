@@ -21,7 +21,7 @@ namespace TurboAz.API.Controllers
             _paymentService = paymentService;   
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("GetAllAnnouncement")]
         public IActionResult GetAll()
         {
             var res = _announcementService.GetAll();
@@ -35,22 +35,22 @@ namespace TurboAz.API.Controllers
             return Ok(res);
         }
 
-        [HttpDelete("Delete")]
+        [HttpDelete("DeleteAnnouncement")]
         public IActionResult Delete([FromQuery]int id)
         {
             var res = _announcementService.Delete(id);
             return Ok(res);
         }
 
-        [HttpPut("Update")]
-        public IActionResult Update([FromBody]Announcement announcement)
+        [HttpPut("UpdateAnnouncement")]
+        public IActionResult UpdateAnnouncement([FromBody]Announcement announcement)
         {
             var res = _announcementService.Update(announcement);
             return Ok(res);
         }
 
         [HttpPost("Add")]
-        public IActionResult Add([FromBody]Announcement announcement)
+        public IActionResult AddAnnouncement([FromBody]Announcement announcement)
         {
             var res = _announcementService.Add(announcement);
             return Ok(res);
@@ -74,7 +74,6 @@ namespace TurboAz.API.Controllers
                 _announcementService.SetVip(model.AnnouncmentId);
                 return Ok($"Announcment set VIP with id : {model.AnnouncmentId}");
             }
-
             return BadRequest($"Announcment cannot set VIP with id : {model.AnnouncmentId}");
         }
 
