@@ -5,51 +5,73 @@ using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
 using TurboAz.Repository.CQRS.Commands.Abstract;
+using static Dapper.SqlMapper;
+
 
 namespace TurboAz.Repository.CQRS.Commands.Concrete
 {
     public class CategoryCommand : ICategoryCommand
     {
-        private readonly IUnitOfWork1<Category> _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryCommand(IUnitOfWork1<Category> unitOfWork)
+        public CategoryCommand(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public int AddCategory(Category category)
+        private string _sqlAdd = $@"INSERT INTO CATEGORIES ([Id],[Name])
+                                   VALUES(@{nameof(Category.Id)},
+                                          @{nameof(Category.Name)})";
+
+        private string _sqlDelete = $@"DELETE FROM CATEGORIES WHERE Id=@id";
+
+        private string _sqlUpdate = $@"UPDATE CATEGORIES
+                                       SET Name = @name
+                                       WHERE Id=@id";
+
+ 
+       public async Task<int> AddCategory(Category category)
         {
-            var categoryList = _unitOfWork.DeserializeFromJson<Category>();
-            var currentCategory = categoryList.OrderByDescending(i => i.Id == category.Id).FirstOrDefault();
-            if (currentCategory is null)
+            try
             {
-                category.Id = 0;
+                var result = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<int>(_sqlAdd, category, _unitOfWork.GetTransaction());
+                return result;
             }
-            else
+            catch (Exception ex)
             {
-                category.Id = currentCategory.Id + 1;
+                throw ex;
             }
-            categoryList.Add(category);
-            _unitOfWork.WriteToJson(categoryList);
-            return category.Id;
         }
 
-        public bool DeleteCategory(int id)
+        public async Task<bool> DeleteCategory(int id)
         {
-            var categoryList = _unitOfWork.DeserializeFromJson<Category>();
-            var currentCategory = categoryList.FirstOrDefault(i => i.Id == id);
-            var result = categoryList.Remove(currentCategory);
-            _unitOfWork.WriteToJson(categoryList);
-            return result;
+
+            try
+            {
+                var param = new { id };
+                await _unitOfWork.GetConnection().QueryAsync(_sqlDelete, param, _unitOfWork.GetTransaction());
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+           
         }
 
-        public Category UpdateCategory(Category category)
+        public async Task<Category> UpdateCategory(Category category)
         {
-            var categoryList = _unitOfWork.DeserializeFromJson<Category>();
-            var currentCategory = categoryList.FirstOrDefault(i => i.Id == category.Id);
-            currentCategory.Name = category.Name;
-            _unitOfWork.WriteToJson(categoryList);
-            return currentCategory;
+            try
+            {
+                await _unitOfWork.GetConnection().QueryAsync(_sqlUpdate, category, _unitOfWork.GetTransaction());
+                return category;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

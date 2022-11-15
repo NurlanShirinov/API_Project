@@ -9,8 +9,8 @@ namespace TurboAz.Repository.CQRS.Commands.Abstract
 {
     public interface ICategoryCommand
     {
-        int AddCategory(Category category);
-        bool DeleteCategory(int id);
-        Category UpdateCategory(Category category);
+        Task<int> AddCategory(Category category);
+        Task<bool> DeleteCategory(int id);
+        Task<Category> UpdateCategory(Category category);
     }
 }

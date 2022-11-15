@@ -10,7 +10,7 @@ using TurboAz.Repository.Repositories.Abstract;
 
 namespace TurboAz.Repository.Repositories.Concrete
 {
-    public class CategoryRepository:ICategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly ICategoryQuery _categoryQuery;
         private readonly ICategoryCommand _categoryCommand;
@@ -21,35 +21,31 @@ namespace TurboAz.Repository.Repositories.Concrete
             _categoryCommand = categoryCommand;
         }
 
-        public int AddCategory(Category category)
+
+
+        public async Task<int> AddCategory(Category category)
         {
-            var res = _categoryCommand.AddCategory(category);
-            return res;
+            var result = await _categoryCommand.AddCategory(category);
+            return result;
         }
 
-        public bool DeleteCategory(int id)
+        public async Task<bool> DeleteCategory(int id)
         {
-            var res = _categoryCommand.DeleteCategory(id);
-            return res;
+            throw new NotImplementedException();
         }
 
-        public IEnumerable<Category> GetAll()
+        public async Task<IEnumerable<Category>> GetAll()
         {
-            var res = _categoryQuery.GetAll();
-            return res;
-
+            throw new NotImplementedException();
         }
 
-        public Category GetById(int id)
+        public async Task<Category> GetById(int id)
         {
-            var res = _categoryQuery.GetById(id);
-            return res;
+            throw new NotImplementedException();
         }
-
-        public Category UpdateCategory(Category category)
+        public async Task<Category> UpdateCategory(Category category)
         {
-            var res = _categoryCommand.UpdateCategory(category);
-            return res;
+            throw new NotImplementedException();
         }
     }
 }

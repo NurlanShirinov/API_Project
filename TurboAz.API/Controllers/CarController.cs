@@ -18,41 +18,39 @@ namespace TurboAz.API.Controllers
 
 
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var res = _carService.GetAll();
+            var res = await _carService.GetAll();
             return Ok(res);
         }
 
         [HttpGet("GetById")]
-        public IActionResult GetByID([FromQuery] int id)
+        public async Task<IActionResult> GetByID([FromQuery] int id)
         {
-            var res = _carService.GetById(id);
+            var res = await _carService.GetById(id);
             return Ok(res);
         }
 
 
         [HttpPost("AddCar")]
-        public IActionResult AddCar([FromBody] Car car)
+        public async Task<IActionResult> AddCar([FromBody] Car car)
         {
-            var res = _carService.AddCar(car);
+            var res = await _carService.AddCar(car);
             return Ok(res);
         }
 
         [HttpDelete("DeleteCar")]
-        public IActionResult Delete([FromQuery] int id)
+        public async Task<IActionResult> Delete([FromQuery] int id)
         {
-            var res = _carService.DeleteCar(id);
+            var res = await _carService.DeleteCar(id);
             return Ok(res);
         }
 
         [HttpPut("UpdateCar")]
-        public IActionResult Update([FromBody] Car car)
+        public async Task<IActionResult> Update([FromBody] Car car)
         {
-            var res = _carService.UpdateCar(car);
+            var res = await _carService.UpdateCar(car);
             return Ok(res);
         }
-
-
     }
 }

@@ -19,26 +19,23 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
             _unitOfWork = unitOfWork;
         }
 
-        private string _addSql = $@"INSERT INTO CARS (Id,[Name]
-                                    VALUES (@{nameof(Car.Id)})
-                                            @{nameof(Car.Model)}
-                                            @{nameof(Car.Vendor)}
-                                            @{nameof(Car.Color)}
-                                            @{nameof(Car.Year)}
-                                            @{nameof(Car.Price)}";
+        private string _addSql = $@"INSERT INTO CARS (Id,[Model],[Vendor],[Color],[Year],[Price])
+                                    VALUES (@{nameof(Car.Id)},
+                                            @{nameof(Car.Model)},
+                                            @{nameof(Car.Vendor)},
+                                            @{nameof(Car.Color)},
+                                            @{nameof(Car.Year)},
+                                            @{nameof(Car.Price)})";
 
-        private string _deleteSql = $@"DELETE 
-                                      FROM CARS 
-                                      WHERE Id=@id";
+        private string _deleteSql = $@"DELETE FROM CARS WHERE Id=@id";
 
         private string _updateSql = $@"UPDATE CARS
-                                       SET Name = @name
-                                            Model=@model
-                                            Vendor= @vendor
-                                            Color = color
-                                            Year = year
-                                            Price=price
-                                       WHER Id= @id";
+                                       SET Model = @model,
+                                        Vendor = @vendor,
+                                        Color = @color,
+                                        Year = @year,
+                                        Price = @price
+                                       WHERE Id= @id";
 
         public async Task<int> AddCar(Car car)
         {
@@ -49,7 +46,6 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -59,27 +55,24 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
             try
             {
                 var param = new { id };
-                await _unitOfWork.GetConnection().QueryAsync(_addSql, param, _unitOfWork.GetTransaction());
+                await _unitOfWork.GetConnection().QueryAsync(_deleteSql, param, _unitOfWork.GetTransaction());
                 return true;
             }
             catch (Exception ex)
             {
-
                 throw ex;
                 return false;
             }
         }
-
         public async Task<Car> UpdateCar(Car car)
         {
             try
             {
-                await _unitOfWork.GetConnection().QueryAsync(_updateSql, car,_unitOfWork.GetTransaction());
+                await _unitOfWork.GetConnection().QueryAsync(_updateSql, car, _unitOfWork.GetTransaction());
                 return car;
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

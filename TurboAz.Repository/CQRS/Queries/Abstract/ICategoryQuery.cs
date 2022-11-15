@@ -9,7 +9,7 @@ namespace TurboAz.Repository.CQRS.Queries.Abstract
 {
     public interface ICategoryQuery
     {
-        Category GetById(int id);
-        IEnumerable<Category> GetAll();
+        Task<Category> GetById(int id);
+        Task<IEnumerable<Category>> GetAll();
     }
 }

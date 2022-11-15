@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,24 +11,48 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
 {
     public class CategoryQuery : ICategoryQuery
     {
-        public readonly IUnitOfWork1<Category> _unitOfWork;
+        public readonly IUnitOfWork _unitOfWork;
 
-        public CategoryQuery(IUnitOfWork1<Category> unitOfWork)
+        public CategoryQuery(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<Category> GetAll()
+        private string GetAllSql = $@"SELECT * FROM CATEGORIES";
+        private string GetByIdSql = $@"SELECT * FROM CATEGORIES WHERE Id=@id";
+
+        public async Task<IEnumerable<Category>> GetAll()
         {
-            var categoryList = _unitOfWork.DeserializeFromJson<Category>();
-            return categoryList;
+            try
+            {
+                var result = await _unitOfWork.GetConnection().QueryAsync<Category>(GetAllSql, null, _unitOfWork.GetTransaction());
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
-        public Category GetById(int id)
+        public async Task<Category> GetById(int id)
         {
-            var categoryList = _unitOfWork.DeserializeFromJson<Category>();
-            var currentCategory = categoryList.FirstOrDefault(i => i.Id == id);
-            return currentCategory;
+            try
+            {
+
+                var param = new { id };
+
+               var result= await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync(GetByIdSql, param, _unitOfWork.GetTransaction());
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

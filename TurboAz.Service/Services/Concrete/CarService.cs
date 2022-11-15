@@ -18,33 +18,33 @@ namespace TurboAz.Service.Services.Concrete
             _carRepository = carRepository;
         }
 
-        public int AddCar(Car car)
+        public async Task<int> AddCar(Car car)
         {
-            var res = _carRepository.AddCar(car);
+            var res = await _carRepository.AddCar(car);
             return res;
         }
 
-        public bool DeleteCar(int id)
+        public async Task<bool> DeleteCar(int id)
         {
-            var res = _carRepository.DeleteCar(id);
+            var res = await _carRepository.DeleteCar(id);
             return res;
         }
 
-        public IEnumerable<Car> GetAll()
+        public async  Task<IEnumerable<Car>> GetAll()
         {
-            var res = _carRepository.GetAll();
+            var res = await _carRepository.GetAll();
             return res;
         }
 
-        public Car GetById(int id)
+        public async Task<Car> GetById(int id)
         {
-            var res = _carRepository.GetById(id);
+            var res = await _carRepository.GetById(id);
             return res;
         }
 
-        public Car UpdateCar(Car car)
+        public async Task<Car> UpdateCar(Car car)
         {
-            var res = _carRepository.UpdateCar(car);
+            var res = await _carRepository.UpdateCar(car);
             return car;
         }
     }

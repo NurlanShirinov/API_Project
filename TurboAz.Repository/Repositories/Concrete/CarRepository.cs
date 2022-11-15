@@ -21,34 +21,35 @@ namespace TurboAz.Repository.Repositories.Concrete
             _carQuery = carQuery;
         }
 
-        public int AddCar(Car car)
+        public async Task<int> AddCar(Car car)
         {
-            var res = _carCommand.AddCar(car);
+            var res = await _carCommand.AddCar(car);
             return res;
         }
 
-        public bool DeleteCar(int id)
+        public async Task<bool> DeleteCar(int id)
         {
-            var res = _carCommand.DeleteCar(id);
+            var res = await _carCommand.DeleteCar(id);
             return res;
         }
 
-        public IEnumerable<Car> GetAll()
+        public async Task<IEnumerable<Car>> GetAll()
         {
-            var res = _carQuery.GetAll();
+            var res = await _carQuery.GetAll();
             return res;
         }
 
-        public Car GetById(int id)
+        public async Task<Car> GetById(int id)
         {
-            var res = _carQuery.GetById(id);
+            var res = await _carQuery.GetById(id);
             return res;
         }
 
-        public Car UpdateCar(Car car)
+        public async Task<Car> UpdateCar(Car car)
         {
-            var res = _carCommand.UpdateCar(car);
+            var res = await _carCommand.UpdateCar(car);
             return res;
         }
+
     }
 }

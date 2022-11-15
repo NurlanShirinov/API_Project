@@ -9,10 +9,10 @@ namespace TurboAz.Repository.Repositories.Abstract
 {
     public interface ICategoryRepository
     {
-        int AddCategory(Category category);
-        bool DeleteCategory(int id);
-        Category UpdateCategory(Category category);
-        Category GetById(int id);
-        IEnumerable<Category> GetAll();
+        Task<int> AddCategory(Category category);
+        Task<bool> DeleteCategory(int id);
+        Task<Category> UpdateCategory(Category category);
+        Task<Category> GetById(int id);
+        Task<IEnumerable<Category>> GetAll();
     }
 }

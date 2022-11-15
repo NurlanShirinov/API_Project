@@ -9,10 +9,10 @@ namespace TurboAz.Service.Services.Abstract
 {
     public interface ICarService
     {
-        int AddCar(Car car);
-        bool DeleteCar(int id);
-        Car UpdateCar(Car car);
-        Car GetById(int id);
-        IEnumerable<Car> GetAll();
+        Task<int> AddCar(Car car);
+        Task<bool> DeleteCar(int id);
+        Task<Car> UpdateCar(Car car);
+        Task<Car> GetById(int id);
+        Task<IEnumerable<Car>> GetAll();
     }
 }
