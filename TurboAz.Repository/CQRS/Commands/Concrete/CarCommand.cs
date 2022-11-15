@@ -5,60 +5,83 @@ using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
 using TurboAz.Repository.CQRS.Commands.Abstract;
+using static Dapper.SqlMapper;
+
 
 namespace TurboAz.Repository.CQRS.Commands.Concrete
 {
     public class CarCommand : ICarCommand
     {
-        private readonly IUnitOfWork1<Car> _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CarCommand(IUnitOfWork1<Car> unitOfWork)
+        public CarCommand(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public int AddCar(Car car)
-        {
-            var carList = _unitOfWork.DeserializeFromJson<Car>();
-            var currentCar = carList.OrderByDescending(i => i.Id).FirstOrDefault();
-            if (currentCar is null)
-            {
-                car.Id = 0;
-            }
-            else
-            {
-                car.Id = currentCar.Id + 1;
-            }
-            carList.Add(car);
-            _unitOfWork.WriteToJson(carList);
-            return car.Id;
+        private string _addSql = $@"INSERT INTO CARS (Id,[Name]
+                                    VALUES (@{nameof(Car.Id)})
+                                            @{nameof(Car.Model)}
+                                            @{nameof(Car.Vendor)}
+                                            @{nameof(Car.Color)}
+                                            @{nameof(Car.Year)}
+                                            @{nameof(Car.Price)}";
 
+        private string _deleteSql = $@"DELETE 
+                                      FROM CARS 
+                                      WHERE Id=@id";
+
+        private string _updateSql = $@"UPDATE CARS
+                                       SET Name = @name
+                                            Model=@model
+                                            Vendor= @vendor
+                                            Color = color
+                                            Year = year
+                                            Price=price
+                                       WHER Id= @id";
+
+        public async Task<int> AddCar(Car car)
+        {
+            try
+            {
+                var result = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<int>(_addSql, car, _unitOfWork.GetTransaction());
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
-        public bool DeleteCar(int id)
+        public async Task<bool> DeleteCar(int id)
         {
-            var carList = _unitOfWork.DeserializeFromJson<Car>();
-            var latestRecord = carList.FirstOrDefault(i => i.Id == id);
-            var result=carList.Remove(latestRecord);
-            _unitOfWork.WriteToJson(carList);
-            return result;
+            try
+            {
+                var param = new { id };
+                await _unitOfWork.GetConnection().QueryAsync(_addSql, param, _unitOfWork.GetTransaction());
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+                return false;
+            }
         }
 
-        public Car UpdateCar(Car car)
+        public async Task<Car> UpdateCar(Car car)
         {
-            var carList = _unitOfWork.DeserializeFromJson<Car>();
-            var latestRecord = carList.FirstOrDefault(i => i.Id == car.Id);
-            if(latestRecord is not null)
+            try
             {
-                latestRecord.Color = car.Color;
-                latestRecord.Model = car.Model;
-                latestRecord.Year = car.Year;
-                latestRecord.Price = car.Price;
-                latestRecord.Vendor = car.Vendor;
+                await _unitOfWork.GetConnection().QueryAsync(_updateSql, car,_unitOfWork.GetTransaction());
+                return car;
             }
-            _unitOfWork.WriteToJson(carList);
-            return latestRecord;
+            catch (Exception ex)
+            {
 
+                throw ex;
+            }
         }
     }
 }

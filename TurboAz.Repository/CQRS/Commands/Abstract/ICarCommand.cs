@@ -9,9 +9,9 @@ namespace TurboAz.Repository.CQRS.Commands.Abstract
 {
     public interface ICarCommand
     {
-        int AddCar(Car car);
-        bool DeleteCar(int id);
-        Car UpdateCar(Car car);
+        Task<int> AddCar(Car car);
+        Task<bool> DeleteCar(int id);
+        Task<Car> UpdateCar(Car car);
        
     }
 }

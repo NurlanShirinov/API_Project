@@ -9,7 +9,7 @@ namespace TurboAz.Repository.CQRS.Queries.Abstract
 {
     public interface ICarQuery
     {
-        Car GetById(int id);
-        IEnumerable<Car> GetAll();
+        Task<Car> GetById(int id);
+        Task<IEnumerable<Car>> GetAll();
     }
 }

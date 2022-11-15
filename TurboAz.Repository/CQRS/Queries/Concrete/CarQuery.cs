@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,24 +11,45 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
 {
     public class CarQuery : ICarQuery
     {
-        private readonly IUnitOfWork1<Car> _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CarQuery(IUnitOfWork1<Car> unitOfWork)
+        public CarQuery(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<Car> GetAll()
+        private string _sqlGetAll = $@"SELECT * FROM CARS";
+
+        private string _sqlGetById = $@"SELECT * FROM CARS WHERE Id=@id";
+
+        public async Task<IEnumerable<Car>> GetAll()
         {
-            var carList = _unitOfWork.DeserializeFromJson<Car>();
-            return carList;
+            try
+            {
+                var result = await _unitOfWork.GetConnection().QueryAsync<Car>(_sqlGetAll, null, _unitOfWork.GetTransaction());
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
-        public Car GetById(int id)
+       public async Task<Car> GetById(int id)
         {
-            var carList = _unitOfWork.DeserializeFromJson<Car>();
-            var currentCar = carList.OrderByDescending(i => i.Id == id).FirstOrDefault();
-            return currentCar;
+            var param = new { id };
+            try
+            {
+                var result = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<Car>(_sqlGetById, param, _unitOfWork.GetTransaction());
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }
