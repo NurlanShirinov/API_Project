@@ -18,60 +18,60 @@ namespace TurboAz.API.Controllers
         public AnnouncementController(IAnnouncementService announcementService, IPaymentService paymentService)
         {
             _announcementService = announcementService;
-            _paymentService = paymentService;   
+            _paymentService = paymentService;
         }
 
         [HttpGet("GetAllAnnouncement")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var res = _announcementService.GetAll();
+            var res = await _announcementService.GetAll();
             return Ok(res);
         }
 
         [HttpGet("GetById")]
-        public IActionResult GetById([FromQuery]int id)
+        public async Task<IActionResult> GetById([FromQuery] int id)
         {
-            var res = _announcementService.GetById(id);
+            var res = await _announcementService.GetById(id);
             return Ok(res);
         }
 
         [HttpDelete("DeleteAnnouncement")]
-        public IActionResult Delete([FromQuery]int id)
+        public async Task<IActionResult> Delete([FromQuery] int id)
         {
-            var res = _announcementService.Delete(id);
+            var res = await _announcementService.Delete(id);
             return Ok(res);
         }
 
         [HttpPut("UpdateAnnouncement")]
-        public IActionResult UpdateAnnouncement([FromBody]Announcement announcement)
+        public async Task<IActionResult> UpdateAnnouncement([FromBody] Announcement announcement)
         {
-            var res = _announcementService.Update(announcement);
+            var res = await _announcementService.Update(announcement);
             return Ok(res);
         }
 
         [HttpPost("Add")]
-        public IActionResult AddAnnouncement([FromBody]Announcement announcement)
+        public async  Task<IActionResult> AddAnnouncement([FromBody] Announcement announcement)
         {
-            var res = _announcementService.Add(announcement);
+            var res = await _announcementService.Add(announcement);
             return Ok(res);
         }
 
 
-        [HttpPost("GetFilteredData")]
-        public IActionResult GetFilteredData([FromBody] GetFilteredDataRequestModel model)
-        {
-            var res = _announcementService.Filtered(model);
-            return Ok(res);
-        }
+        //[HttpPost("GetFilteredData")]
+        //public async Task<IActionResult> GetFilteredData([FromBody] GetFilteredDataRequestModel model)
+        //{
+        //    var res = await _announcementService.Filtered(model);
+        //    return Ok(res);
+        //}
 
         [HttpPost("SetAnnouncmentToVip")]
-        public IActionResult SetAnnouncmentToVip([FromBody] SetAnnouncmentVipRequestModel model)
+        public async Task<IActionResult> SetAnnouncmentToVip([FromBody] SetAnnouncmentVipRequestModel model)
         {
             var paymentStatus = _paymentService.Pay(model.CardNumber, model.Email);
 
             if (paymentStatus is true)
             {
-                _announcementService.SetVip(model.AnnouncmentId);
+                await _announcementService.SetVip(model.AnnouncmentId);
                 return Ok($"Announcment set VIP with id : {model.AnnouncmentId}");
             }
             return BadRequest($"Announcment cannot set VIP with id : {model.AnnouncmentId}");

@@ -20,44 +20,45 @@ namespace TurboAz.Service.Services.Concrete
             _announcementRepository = announcementRepository;
         }
 
-        public int Add(Announcement announcement)
+
+        public async Task<int> Add(Announcement announcement)
         {
-            var res = _announcementRepository.Add(announcement);
+            var res = await _announcementRepository.Add(announcement);
             return res;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var res = _announcementRepository.Delete(id);
+            var res = await _announcementRepository.Delete(id);
             return res;
         }
 
-        public IEnumerable<Announcement> Filtered(GetFilteredDataRequestModel get)
+        //public async Task<IEnumerable<Announcement>> Filtered(GetFilteredDataRequestModel get)
+        //{
+        //    var res = _announcementRepository.Filtered(get);
+        //    return res;
+        //}
+
+        public async Task<IEnumerable<Announcement>> GetAll()
         {
-            var res = _announcementRepository.Filtered(get);
+            var res = await _announcementRepository.GetAll();
             return res;
         }
 
-        public IEnumerable<Announcement> GetAll()
+        public async Task<Announcement> GetById(int id)
         {
-            var res = _announcementRepository.GetAll();
+            var res = await _announcementRepository.GetById(id);
             return res;
         }
 
-        public Announcement GetById(int id)
+        public async Task SetVip(int announcmentId)
         {
-            var res = _announcementRepository.GetById(id);
-            return res;
+            await _announcementRepository.SetVip(announcmentId);
         }
 
-        public void SetVip(int announcmentId)
+        public async Task<Announcement> Update(Announcement announcement)
         {
-            _announcementRepository.SetVip(announcmentId);
-        }
-
-        public Announcement Update(Announcement announcement)
-        {
-            var res = _announcementRepository.Update(announcement);
+            var res = await _announcementRepository.Update(announcement);
             return res;
         }
     }

@@ -21,38 +21,38 @@ namespace TurboAz.Repository.Repositories.Concrete
             _announcementCommand = announcementCommand;
             _announcementQuery = announcementQuery;
         }
-        public int Add(Announcement announcement)
+        public async Task<int> Add(Announcement announcement)
         {
-            var res = _announcementCommand.Add(announcement);
+            var res = await _announcementCommand.Add(announcement);
             return res;
         }
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var res = _announcementCommand.Delete(id);
+            var res = await _announcementCommand.Delete(id);
             return res;
         }
-        public IEnumerable<Announcement> Filtered(GetFilteredDataRequestModel get)
+        //public IEnumerable<Announcement> Filtered(GetFilteredDataRequestModel get)
+        //{
+        //    var res = _announcementQuery.Filtered(get);
+        //    return res;
+        //}
+        public async Task<IEnumerable<Announcement>> GetAll()
         {
-            var res = _announcementQuery.Filtered(get);
+            var res = await _announcementQuery.GetAll();
             return res;
         }
-        public IEnumerable<Announcement> GetAll()
+        public async Task<Announcement> GetById(int id)
         {
-            var res = _announcementQuery.GetAll();
+            var res = await _announcementQuery.GetById(id);
             return res;
         }
-        public Announcement GetById(int id)
+        public async Task SetVip(int announcmentId)
         {
-            var res = _announcementQuery.GetById(id);
-            return res;
+           await _announcementCommand.SetVip(announcmentId);
         }
-        public void SetVip(int announcmentId)
+        public async Task<Announcement> Update(Announcement announcement)
         {
-            _announcementCommand.SetVip(announcmentId);
-        }
-        public Announcement Update(Announcement announcement)
-        {
-            var res = _announcementCommand.Update(announcement);
+            var res = await _announcementCommand.Update(announcement);
             return res;
         }
     }

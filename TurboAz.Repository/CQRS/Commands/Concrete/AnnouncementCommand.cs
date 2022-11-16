@@ -18,7 +18,7 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
             _unitOfWork = unitOfWork;
         }
 
-        private string _deleteSq = "DELETE FROM ANNOUNCEMENTS WHERE Id=@id";
+        private string _deleteSq = "DELETE FROM ANNOUNCMENTS WHERE Id=@id";
 
         private string _addSql = $@"INSERT INTO ANNOUNCMENTS([CreatedDate],[RowNum],[CarId],[CityIdint],[CategoryId],[Price],[ViewCount],[IsActive],[IsVip],[Expired])
                                  VALUES(@{nameof(Announcement.CreatedDate)},

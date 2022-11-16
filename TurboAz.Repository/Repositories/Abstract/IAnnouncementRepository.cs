@@ -10,12 +10,13 @@ namespace TurboAz.Repository.Repositories.Abstract
 {
     public interface IAnnouncementRepository
     {
-        int Add(Announcement announcement);
-        bool Delete(int id);
-        Announcement Update(Announcement announcement);
-        Announcement GetById(int id);
-        IEnumerable<Announcement> GetAll();
-        void SetVip(int announcmentId);
-        IEnumerable<Announcement> Filtered(GetFilteredDataRequestModel get);
+        Task<int> Add(Announcement announcement);
+        Task<bool> Delete(int id);
+        Task<Announcement> Update(Announcement announcement);
+        Task<Announcement> GetById(int id);
+        Task<IEnumerable<Announcement>> GetAll();
+        Task SetVip(int announcmentId);
+
+        //IEnumerable<Announcement> Filtered(GetFilteredDataRequestModel get);
     }
 }
