@@ -17,20 +17,21 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
         {
             _unitOfWork = unitOfWork;
         }
-
+        
         private string _deleteSq = "DELETE FROM ANNOUNCMENTS WHERE Id=@id";
 
-        private string _addSql = $@"INSERT INTO ANNOUNCMENTS([CreatedDate],[RowNum],[CarId],[CityIdint],[CategoryId],[Price],[ViewCount],[IsActive],[IsVip],[Expired])
+        private string _addSql = $@"INSERT INTO ANNOUNCMENTS([CreatedDate],[RowNum],[CarId],[CityIdint],[CategoryId],[Price],[ViewCount],[IsActive],[IsVip],[Expired],[Id])
                                  VALUES(@{nameof(Announcement.CreatedDate)},
-                                        @{nameof(Announcement.AnnouncemenNumber)}
-                                        @{nameof(Announcement.AnnouncedCarId)}
-                                        @{nameof(Announcement.AnnouncedCityId)}
-                                        @{nameof(Announcement.AnnouncedCarCategoryId)}
-                                        @{nameof(Announcement.Price)}
-                                        @{nameof(Announcement.ViewCount)}
-                                        @{nameof(Announcement.IsActive)}
-                                        @{nameof(Announcement.IsVip)}
-                                        @{nameof(Announcement.AnnouncementDeadline)})";
+                                        @{nameof(Announcement.AnnouncemenNumber)},
+                                        @{nameof(Announcement.AnnouncedCarId)},
+                                        @{nameof(Announcement.AnnouncedCityId)},
+                                        @{nameof(Announcement.AnnouncedCarCategoryId)},
+                                        @{nameof(Announcement.Price)},
+                                        @{nameof(Announcement.ViewCount)},
+                                        @{nameof(Announcement.IsActive)},
+                                        @{nameof(Announcement.IsVip)},
+                                        @{nameof(Announcement.AnnouncementDeadline)},
+                                        @{nameof(Announcement.Id)})";
 
         private string _updateSql = $@"UPDATE ANNOUNCMENTS
                                        SET CreatedDate = @createdDate
@@ -48,8 +49,6 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
         private string _setVipSql = $@"UPDATE ANNOUNCMENTS
                                        SET IsVip = {1}
                                        WHERE Id=id";
-
-
         public async Task<int> Add(Announcement announcement)
         {
             try
@@ -59,7 +58,6 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -74,7 +72,6 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
             }
             catch (Exception ex)
             {
-
                 throw ex;
                 return false;
             }
@@ -89,7 +86,6 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -103,7 +99,6 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
