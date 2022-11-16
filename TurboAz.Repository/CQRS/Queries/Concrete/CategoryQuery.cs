@@ -38,19 +38,14 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
 
         public async Task<Category> GetById(int id)
         {
+            var param = new { id };
             try
             {
-
-                var param = new { id };
-
-               var result= await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync(GetByIdSql, param, _unitOfWork.GetTransaction());
+               var result= await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<Category>(GetByIdSql, param, _unitOfWork.GetTransaction());
                 return result;
-
-
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

@@ -10,8 +10,8 @@ namespace TurboAz.Repository.CQRS.Queries.Abstract
 {
     public interface IAnnouncementQuery
     {
-        Announcement GetById(int id);
-        IEnumerable<Announcement> GetAll(); 
+        Task<Announcement> GetById(int id);
+        Task<IEnumerable<Announcement>> GetAll(); 
         IEnumerable<Announcement> Filtered(GetFilteredDataRequestModel get);
     }
 }

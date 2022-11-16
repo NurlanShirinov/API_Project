@@ -17,29 +17,30 @@ namespace TurboAz.Service.Services.Concrete
         {
             _categoryRepository = categoryRepository;
         }
-        public int AddCategory(Category category)
+
+        public async  Task<int> AddCategory(Category category)
         {
-            var res = _categoryRepository.AddCategory(category);
+            var res = await _categoryRepository.AddCategory(category);
             return res;
         }
-        public bool DeleteCategory(int id)
+        public async  Task<bool> DeleteCategory(int id)
         {
-            var res = _categoryRepository.DeleteCategory(id);
+            var res = await _categoryRepository.DeleteCategory(id);
             return res;
         }
-        public IEnumerable<Category> GetAll()
+        public async Task<IEnumerable<Category>> GetAll()
         {
-            var res = _categoryRepository.GetAll();
+            var res = await _categoryRepository.GetAll();
             return res;
         }
-        public Category GetById(int id)
+        public async Task<Category> GetById(int id)
         {
-            var res = _categoryRepository.GetById(id);
+            var res = await _categoryRepository.GetById(id);
             return res;
         }
-        public Category UpdateCategory(Category category)
-        {
-            var res = _categoryRepository.UpdateCategory(category);
+        public async Task<Category> UpdateCategory(Category category)
+        { 
+            var res = await _categoryRepository.UpdateCategory(category);
             return res;
         }
     }

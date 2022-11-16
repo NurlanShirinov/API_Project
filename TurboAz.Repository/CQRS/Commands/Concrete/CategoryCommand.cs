@@ -23,6 +23,8 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
                                    VALUES(@{nameof(Category.Id)},
                                           @{nameof(Category.Name)})";
 
+
+
         private string _sqlDelete = $@"DELETE FROM CATEGORIES WHERE Id=@id";
 
         private string _sqlUpdate = $@"UPDATE CATEGORIES
@@ -59,7 +61,6 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
             }
            
         }
-
         public async Task<Category> UpdateCategory(Category category)
         {
             try

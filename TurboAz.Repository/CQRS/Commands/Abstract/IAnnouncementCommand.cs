@@ -9,10 +9,10 @@ namespace TurboAz.Repository.CQRS.Commands.Abstract
 {
     public interface IAnnouncementCommand
     {
-        int Add(Announcement announcement);
-        bool Delete(int id);
-        Announcement Update(Announcement announcement);
-        void SetVip(int announcmentId);
+        Task<int> Add(Announcement announcement);
+        Task<bool> Delete(int id);
+        Task<Announcement> Update(Announcement announcement);
+        Task SetVip(int announcmentId);
        
     }
 }

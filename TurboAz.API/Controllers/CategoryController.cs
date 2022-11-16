@@ -16,37 +16,37 @@ namespace TurboAz.API.Controllers
         }
 
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var res = _categoryService.GetAll();
+            var res = await _categoryService.GetAll();
             return Ok(res);
         }
 
         [HttpGet("GetById")]
-        public IActionResult GetById([FromQuery] int id)
+        public async Task<IActionResult> GetById([FromQuery] int id)
         {
-            var res = _categoryService.GetById(id);
+            var res = await _categoryService.GetById(id);
             return Ok(res);
         }
 
         [HttpPost("Add")]
-        public IActionResult AddCategory([FromBody] Category category)
+        public async Task<IActionResult> AddCategory([FromBody] Category category)
         {
-            var res = _categoryService.AddCategory(category);
+            var res = await _categoryService.AddCategory(category);
             return Ok(res);
         }
 
         [HttpPost("Update")]
-        public IActionResult Update([FromBody]Category category)
+        public async Task<IActionResult> Update([FromBody] Category category)
         {
-            var res = _categoryService.UpdateCategory(category);
+            var res = await _categoryService.UpdateCategory(category);
             return Ok(res);
         }
 
         [HttpDelete("Delete")]
-        public IActionResult Delete([FromQuery] int id)
+        public async Task<IActionResult> Delete([FromQuery] int id)
         {
-            var res = _categoryService.DeleteCategory(id);
+            var res = await _categoryService.DeleteCategory(id);
             return Ok(res);
         }
     }
