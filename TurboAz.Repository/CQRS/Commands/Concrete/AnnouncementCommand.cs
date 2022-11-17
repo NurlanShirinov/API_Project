@@ -20,29 +20,28 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
         
         private string _deleteSq = "DELETE FROM ANNOUNCMENTS WHERE Id=@id";
 
-        private string _addSql = $@"INSERT INTO ANNOUNCMENTS([CreatedDate],[RowNum],[CarId],[CityIdint],[CategoryId],[Price],[ViewCount],[IsActive],[IsVip],[Expired],[Id])
+        private string _addSql = $@"INSERT INTO ANNOUNCMENTS([CreatedDate],[Price],[ViewCount],[IsActive],[IsVip],[Expired],[Number],[CarId],[CityId],[CategoryId])
                                  VALUES(@{nameof(Announcement.CreatedDate)},
-                                        @{nameof(Announcement.AnnouncemenNumber)},
-                                        @{nameof(Announcement.AnnouncedCarId)},
-                                        @{nameof(Announcement.AnnouncedCityId)},
-                                        @{nameof(Announcement.AnnouncedCarCategoryId)},
                                         @{nameof(Announcement.Price)},
                                         @{nameof(Announcement.ViewCount)},
                                         @{nameof(Announcement.IsActive)},
                                         @{nameof(Announcement.IsVip)},
-                                        @{nameof(Announcement.AnnouncementDeadline)},
-                                        @{nameof(Announcement.Id)})";
+                                        @{nameof(Announcement.Expired)},
+                                        @{nameof(Announcement.Number)},
+                                        @{nameof(Announcement.CarId)},
+                                        @{nameof(Announcement.CityId)},
+                                        @{nameof(Announcement.CategoryId)})";
 
         private string _updateSql = $@"UPDATE ANNOUNCMENTS
-                                       SET CreatedDate = @createdDate
-                                           RowNum = @rowNum
-                                           CarId = @carId
-                                           CityIdint = @cityIdint
-                                           CategoryId = @categoryId
-                                           Price = @price
-                                           ViewCount = @vievCount
-                                           IsActive = @isActive
-                                           IsVip = @icActive
+                                       SET CreatedDate = @createdDate,
+                                           Number = @number,
+                                           CarId = @carId,
+                                           CityId = @cityId,
+                                           CategoryId = @categoryId,
+                                           Price = @price,
+                                           ViewCount = @viewCount,
+                                           IsActive = @isActive,
+                                           IsVip = @isVip,
                                            Expired = @expired
                                        WHERE Id=@id";
 

@@ -18,10 +18,19 @@ namespace TurboAz.Repository.Repositories.Concrete
             _paymentCommand = paymentCommand;
         }
 
-        public bool Pay(CardNumber cardNumber, Email email)
+        public async Task<bool> Pay(CardNumber cardNumber, Email email)
         {
-           var res = _paymentCommand.Pay(cardNumber, email);
-            return res;
+            try
+            {
+                var res = await _paymentCommand.Pay(cardNumber, email);
+                return res;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                return false;
+            }
+         
         }
     }
 }

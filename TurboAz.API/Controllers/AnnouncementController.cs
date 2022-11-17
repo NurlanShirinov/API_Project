@@ -67,7 +67,7 @@ namespace TurboAz.API.Controllers
         [HttpPost("SetAnnouncmentToVip")]
         public async Task<IActionResult> SetAnnouncmentToVip([FromBody] SetAnnouncmentVipRequestModel model)
         {
-            var paymentStatus = _paymentService.Pay(model.CardNumber, model.Email);
+            var paymentStatus = await _paymentService.Pay(model.CardNumber, model.Email);
 
             if (paymentStatus is true)
             {

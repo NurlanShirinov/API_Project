@@ -9,6 +9,6 @@ namespace TurboAz.Repository.CQRS.Commands.Abstract
 {
     public interface IPaymentCommand
     {
-        public bool Pay(CardNumber cardNumber, Email email);
+         Task<bool> Pay(CardNumber cardNumber, Email email);
     }
 }

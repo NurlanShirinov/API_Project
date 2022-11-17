@@ -9,6 +9,6 @@ namespace TurboAz.Service.Services.Abstract
 {
     public interface IPaymentService
     {
-        public bool Pay(CardNumber cardNumber, Email email);
+        public Task<bool> Pay(CardNumber cardNumber, Email email);
     }
 }

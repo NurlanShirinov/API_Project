@@ -17,9 +17,9 @@ namespace TurboAz.Service.Services.Concrete
         {
             _paymentRepository = paymentRepository;
         }
-        public bool Pay(CardNumber cardNumber, Email email)
+        public async  Task<bool> Pay(CardNumber cardNumber, Email email)
         {
-            var res = _paymentRepository.Pay(cardNumber,email);
+            var res = await _paymentRepository.Pay(cardNumber,email);
             return res;
         }
     }

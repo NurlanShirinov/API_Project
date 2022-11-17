@@ -9,6 +9,6 @@ namespace TurboAz.Repository.Repositories.Abstract
 {
     public interface IPaymentRepository
     {
-        public bool Pay(CardNumber cardNumber, Email email);
+        Task<bool> Pay(CardNumber cardNumber, Email email);
     }
 }
