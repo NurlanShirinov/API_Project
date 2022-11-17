@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
 using TurboAz.Core.RequestsModels;
+using TurboAz.Core.ResponseModels;
 
 namespace TurboAz.Repository.Repositories.Abstract
 {
@@ -17,6 +18,6 @@ namespace TurboAz.Repository.Repositories.Abstract
         Task<IEnumerable<Announcement>> GetAll();
         Task SetVip(int announcmentId);
 
-        //IEnumerable<Announcement> Filtered(GetFilteredDataRequestModel get);
+        Task<IEnumerable<AnnoncementResponseModel>> Filtered(GetFilteredDataRequestModel get);
     }
 }

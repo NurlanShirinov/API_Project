@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
 using TurboAz.Core.RequestsModels;
+using TurboAz.Core.ResponseModels;
 using TurboAz.Repository.CQRS.Queries.Abstract;
 
 namespace TurboAz.Repository.CQRS.Queries.Concrete
@@ -20,46 +21,20 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
         }
 
 
-
-
-
+        private string _filteredSql = $@"SELECT A.*,C.Model CarName,CT.Name CategoryName,CI.Name CityName from Announcments A
+                                            LEFT JOIN Cars C ON C.Id = A.CarId
+                                            LEFT JOIN Categories CT ON CT.Id = A.CategoryId
+                                            LEFT JOIN Cities CI ON CI.Id = A.CityId
+                                         WHERE ";
 
         //public IEnumerable<Announcement> Filtered(GetFilteredDataRequestModel get)
         //{
         //    var announcementList = _unitOfWork.DeserializeFromJson<Announcement>();
 
-        //    if (get.IsActive)
-        //    {
-        //        announcementList = announcementList.Where(i => i.IsActive == true).ToList();
-        //    }
-        //    if (get.MinPrice != 0)
-        //    {
-        //        announcementList = announcementList.Where(i => i.AnnouncedCar.Price > get.MinPrice).ToList();
-        //    }
-        //    if (get.MaxPrice != 0)
-        //    {
-        //        announcementList = announcementList.Where(i => i.AnnouncedCar.Price < get.MaxPrice).ToList();
-        //    }
-        //    if (get.CategoryId != 0)
-        //    {
-        //        announcementList = announcementList.Where(i => i.AnnouncedCarCategoryId == get.CategoryId).ToList();
-        //    }
-        //    if (!String.IsNullOrWhiteSpace(get.Color))
-        //    {
-        //        announcementList = announcementList.Where(i => i.AnnouncedCar.Color == get.Color).ToList();
-        //    }
-        //    if (!String.IsNullOrWhiteSpace(get.Model))
-        //    {
-        //        announcementList = announcementList.Where(i => i.AnnouncedCar.Model == get.Model).ToList();
-        //    }
-        //    if (get.Year != 0 && get.Year > 1900 && get.Year <= 2024)
-        //    {
-        //        announcementList = announcementList.Where(i => i.AnnouncedCar.Year == get.Year).ToList();
-        //    }
-        //    if (get.IsVip)
-        //    {
-        //        announcementList = announcementList.Where(i => i.IsVip == true).ToList();
-        //    }
+      
+       
+
+        // 
         //    if (get.StartDate is not null)
         //    {
         //        announcementList = announcementList.Where(i => i.CreatedDate == get.StartDate).ToList();
@@ -71,11 +46,13 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
         //    return announcementList;
         //}
 
-
-        //Task<IEnumerable<Announcement>> IAnnouncementQuery.Filtered(GetFilteredDataRequestModel get)
+        //public async Task<IEnumerable<Announcement>> Filtered(GetFilteredDataRequestModel get)
         //{
         //    throw new NotImplementedException();
         //}
+
+
+
 
         private string GetByIdSql = "SELECT * FROM ANNOUNCMENTS WHERE Id = @id";
 
@@ -91,7 +68,6 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -106,9 +82,72 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
+        }
+
+        public async Task<IEnumerable<AnnoncementResponseModel>> Filtered(GetFilteredDataRequestModel model)
+        {
+            
+            if(model.IsVip is true)
+            {
+                _filteredSql += " A.IsVip = 1 AND ";
+            }
+            else
+            {
+                _filteredSql += " A.IsVip = 0 AND ";
+            }
+
+            if (!String.IsNullOrWhiteSpace(model.Model))
+            {
+                _filteredSql += $" C.Model LIKE '%{model.Model}%'  AND ";
+            }
+
+            if(model.IsActive is true)
+            {
+                _filteredSql += "A.IsActive = 1 AND ";
+            }
+            else
+            {
+                _filteredSql += "A.IsActive = 0 AND ";
+            }
+
+            if (model.CategoryId != null)
+            {
+                _filteredSql += $"CT.Id LIKE '%{model.CategoryId}%' AND ";
+            }
+
+            if (!String.IsNullOrWhiteSpace(model.Color))
+            {
+                _filteredSql += $"C.Color LIKE '%{model.Model}%' AND ";
+            }
+
+            if (model.MinPrice != 0)
+            {
+                _filteredSql += $"C.Price > {model.MinPrice} AND ";
+            }
+
+            if(model.MaxPrice != 0)
+            {
+                _filteredSql += $"C.Price < {model.MaxPrice} AND";
+            }
+
+            if(model.Year!=0 && model.Year > 1900 && model.Year <= 2024)
+            {
+                _filteredSql += $" C.Year LIKE '%{model.Year}%' AND";
+            }
+
+
+            try
+            {
+                var result = await _unitOfWork.GetConnection().QueryAsync<AnnoncementResponseModel>(_filteredSql, null, _unitOfWork.GetTransaction());
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }

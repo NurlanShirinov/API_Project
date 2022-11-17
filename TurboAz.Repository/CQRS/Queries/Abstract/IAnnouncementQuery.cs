@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
 using TurboAz.Core.RequestsModels;
+using TurboAz.Core.ResponseModels;
 
 namespace TurboAz.Repository.CQRS.Queries.Abstract
 {
@@ -12,6 +13,6 @@ namespace TurboAz.Repository.CQRS.Queries.Abstract
     {
         Task<Announcement> GetById(int id); 
         Task<IEnumerable<Announcement>> GetAll(); 
-        //Task<IEnumerable<Announcement>> Filtered(GetFilteredDataRequestModel get);
+        Task<IEnumerable<AnnoncementResponseModel>> Filtered(GetFilteredDataRequestModel get);
     }
 }

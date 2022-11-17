@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
 using TurboAz.Core.RequestsModels;
+using TurboAz.Core.ResponseModels;
 using TurboAz.Repository.CQRS.Commands.Abstract;
 using TurboAz.Repository.CQRS.Queries.Abstract;
 using TurboAz.Repository.Repositories.Abstract;
@@ -31,11 +32,11 @@ namespace TurboAz.Repository.Repositories.Concrete
             var res = await _announcementCommand.Delete(id);
             return res;
         }
-        //public IEnumerable<Announcement> Filtered(GetFilteredDataRequestModel get)
-        //{
-        //    var res = _announcementQuery.Filtered(get);
-        //    return res;
-        //}
+        public async Task<IEnumerable<AnnoncementResponseModel>> Filtered(GetFilteredDataRequestModel get)
+        {
+            var res =await _announcementQuery.Filtered(get);
+            return res;
+        }
         public async Task<IEnumerable<Announcement>> GetAll()
         {
             var res = await _announcementQuery.GetAll();

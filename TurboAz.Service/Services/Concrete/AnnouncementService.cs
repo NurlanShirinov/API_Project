@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
 using TurboAz.Core.RequestsModels;
+using TurboAz.Core.ResponseModels;
 using TurboAz.Repository.Repositories.Abstract;
 using TurboAz.Service.Services.Abstract;
 
@@ -33,11 +34,11 @@ namespace TurboAz.Service.Services.Concrete
             return res;
         }
 
-        //public async Task<IEnumerable<Announcement>> Filtered(GetFilteredDataRequestModel get)
-        //{
-        //    var res = _announcementRepository.Filtered(get);
-        //    return res;
-        //}
+        public async Task<IEnumerable<AnnoncementResponseModel>> Filtered(GetFilteredDataRequestModel get)
+        {
+            var res =await _announcementRepository.Filtered(get);
+            return res;
+        }
 
         public async Task<IEnumerable<Announcement>> GetAll()
         {

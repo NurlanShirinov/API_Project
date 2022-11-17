@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
 using TurboAz.Core.RequestsModels;
+using TurboAz.Core.ResponseModels;
 
 namespace TurboAz.Service.Services.Abstract
 {
@@ -16,6 +17,6 @@ namespace TurboAz.Service.Services.Abstract
         Task<Announcement> GetById(int id);
         Task<IEnumerable<Announcement>> GetAll();
         Task SetVip(int announcmentId);
-        //IEnumerable<Announcement> Filtered(GetFilteredDataRequestModel get);
+        Task<IEnumerable<AnnoncementResponseModel>> Filtered(GetFilteredDataRequestModel get);
     }
 }

@@ -57,12 +57,12 @@ namespace TurboAz.API.Controllers
         }
 
 
-        //[HttpPost("GetFilteredData")]
-        //public async Task<IActionResult> GetFilteredData([FromBody] GetFilteredDataRequestModel model)
-        //{
-        //    var res = await _announcementService.Filtered(model);
-        //    return Ok(res);
-        //}
+        [HttpPost("GetFilteredData")]
+        public async Task<IActionResult> GetFilteredData([FromBody] GetFilteredDataRequestModel model)
+        {
+            var res = await _announcementService.Filtered(model);
+            return Ok(res);
+        }
 
         [HttpPost("SetAnnouncmentToVip")]
         public async Task<IActionResult> SetAnnouncmentToVip([FromBody] SetAnnouncmentVipRequestModel model)
