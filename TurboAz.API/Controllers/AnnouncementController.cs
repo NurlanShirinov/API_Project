@@ -14,7 +14,6 @@ namespace TurboAz.API.Controllers
         private readonly IAnnouncementService _announcementService;
         private readonly IPaymentService _paymentService;
 
-
         public AnnouncementController(IAnnouncementService announcementService, IPaymentService paymentService)
         {
             _announcementService = announcementService;
@@ -55,7 +54,6 @@ namespace TurboAz.API.Controllers
             var res = await _announcementService.Add(announcement);
             return Ok(res);
         }
-
 
         [HttpPost("GetFilteredData")]
         public async Task<IActionResult> GetFilteredData([FromBody] GetFilteredDataRequestModel model)
