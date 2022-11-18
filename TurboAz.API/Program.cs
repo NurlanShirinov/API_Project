@@ -1,4 +1,7 @@
+using MailKit;
+using Microsoft.Extensions.Configuration;
 using TurboAz.API.Infrastructure;
+using TurboAz.Core.Models;
 using TurboAz.Repository.CQRS.Commands.Abstract;
 using TurboAz.Repository.CQRS.Commands.Concrete;
 using TurboAz.Repository.CQRS.Queries.Abstract;
@@ -19,6 +22,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 WebApplication app = null;
 try
 {

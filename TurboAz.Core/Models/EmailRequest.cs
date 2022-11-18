@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace TurboAz.Core.Models
 {
-    public class Payment
+    public class EmailRequest
     {
-        public int Id { get; set; }
-        public string? CardNumber { get; set; }
-        public string? Email { get; set; }
+        public string ToEmail { get; set; }
+        public string Subject { get; set; }
+        public string Body { get; set; }
     }
 }

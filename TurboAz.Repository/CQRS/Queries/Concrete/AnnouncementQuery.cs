@@ -25,33 +25,7 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
                                             LEFT JOIN Cars C ON C.Id = A.CarId
                                             LEFT JOIN Categories CT ON CT.Id = A.CategoryId
                                             LEFT JOIN Cities CI ON CI.Id = A.CityId
-                                         WHERE ";
-
-        //public IEnumerable<Announcement> Filtered(GetFilteredDataRequestModel get)
-        //{
-        //    var announcementList = _unitOfWork.DeserializeFromJson<Announcement>();
-
-      
-       
-
-        // 
-        //    if (get.StartDate is not null)
-        //    {
-        //        announcementList = announcementList.Where(i => i.CreatedDate == get.StartDate).ToList();
-        //    }
-        //    if (get.EndDate is not null)
-        //    {
-        //        announcementList = announcementList.Where(i => i.AnnouncementDeadline == get.EndDate).ToList();
-        //    }
-        //    return announcementList;
-        //}
-
-        //public async Task<IEnumerable<Announcement>> Filtered(GetFilteredDataRequestModel get)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-
+                                         WHERE IsActive = 1 AND ";
 
 
         private string GetByIdSql = "SELECT * FROM ANNOUNCMENTS WHERE Id = @id";
@@ -88,58 +62,68 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
 
         public async Task<IEnumerable<AnnoncementResponseModel>> Filtered(GetFilteredDataRequestModel model)
         {
-            
-            if(model.IsVip is true)
+
+            if (model.IsVip is true)
             {
                 _filteredSql += " A.IsVip = 1 AND ";
             }
-            else
-            {
-                _filteredSql += " A.IsVip = 0 AND ";
-            }
+
 
             if (!String.IsNullOrWhiteSpace(model.Model))
             {
                 _filteredSql += $" C.Model LIKE '%{model.Model}%'  AND ";
             }
 
-            if(model.IsActive is true)
-            {
-                _filteredSql += "A.IsActive = 1 AND ";
-            }
-            else
-            {
-                _filteredSql += "A.IsActive = 0 AND ";
-            }
 
             if (model.CategoryId != null)
             {
-                _filteredSql += $"CT.Id LIKE '%{model.CategoryId}%' AND ";
+                _filteredSql += $" CT.Id = {model.CategoryId} AND ";
             }
 
             if (!String.IsNullOrWhiteSpace(model.Color))
             {
-                _filteredSql += $"C.Color LIKE '%{model.Model}%' AND ";
+                _filteredSql += $" C.Color LIKE '%{model.Color}%' AND ";
             }
 
             if (model.MinPrice != 0)
             {
-                _filteredSql += $"C.Price > {model.MinPrice} AND ";
+                _filteredSql += $" C.Price > {model.MinPrice} AND ";
             }
 
-            if(model.MaxPrice != 0)
+            if (model.MaxPrice != 0)
             {
-                _filteredSql += $"C.Price < {model.MaxPrice} AND";
+                _filteredSql += $" C.Price < {model.MaxPrice} AND ";
             }
 
-            if(model.Year!=0 && model.Year > 1900 && model.Year <= 2024)
+            if (model.Year != 0 && model.Year > 1900 && model.Year <= 2024)
             {
-                _filteredSql += $" C.Year LIKE '%{model.Year}%' AND";
+                _filteredSql += $" C.Year = {model.Year} AND ";
             }
 
+            if (model.StartDate is not null)
+            {
+                _filteredSql += $" A.CreatedDate > '{model.StartDate}' AND ";
+            }
+            if (model.EndDate is not null)
+            {
+                _filteredSql += $" A.CreatedDate < '{model.EndDate}' AND ";
+            }
+
+            if (!String.IsNullOrWhiteSpace(model.CategoryName))
+            {
+                _filteredSql += $" CT.Name LIKE '%{model.CategoryName}%' AND";
+            }
+
+            if (!String.IsNullOrWhiteSpace(model.Vendor))
+            {
+                _filteredSql += $" C.Vendor LIKE '%{model.Vendor}%' AND";
+            }
+
+
+            _filteredSql = _filteredSql += " 1=1";
 
             try
-            {
+            { 
                 var result = await _unitOfWork.GetConnection().QueryAsync<AnnoncementResponseModel>(_filteredSql, null, _unitOfWork.GetTransaction());
                 return result;
             }

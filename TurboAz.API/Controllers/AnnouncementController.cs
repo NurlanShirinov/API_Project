@@ -76,6 +76,5 @@ namespace TurboAz.API.Controllers
             }
             return BadRequest($"Announcment cannot set VIP with id : {model.AnnouncmentId}");
         }
-
     }
 }

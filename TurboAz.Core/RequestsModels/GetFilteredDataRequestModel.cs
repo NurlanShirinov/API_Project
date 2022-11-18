@@ -9,10 +9,10 @@ namespace TurboAz.Core.RequestsModels
 {
     public class GetFilteredDataRequestModel
     {
-        [Range(typeof(DateTime), "1/1/1900", "1/1/2022",
+        [Range(typeof(DateTime), "1/1/1900", "1/1/2023",
         ErrorMessage = "Value for {0} must be between {1} and {2}")]
         public DateTime? StartDate { get; set; }
-        [Range(typeof(DateTime), "1/2/1900", "1/2/2022",
+        [Range(typeof(DateTime), "1/2/1900", "1/2/2023",
          ErrorMessage = "Value for {0} must be between {1} and {2}")]
         public DateTime? EndDate { get; set; }
         public decimal MinPrice { get; set; }
@@ -23,5 +23,7 @@ namespace TurboAz.Core.RequestsModels
         public bool IsVip { get; set; }
         public bool IsActive { get; set; }
         public int? CategoryId { get; set; }
+        public string? CategoryName { get; set; }
+        public string? Vendor { get; set; }
     }
 }
