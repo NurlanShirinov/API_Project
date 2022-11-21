@@ -20,7 +20,6 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
             _unitOfWork = unitOfWork;
         }
 
-
         private string _filteredSql = $@"SELECT A.*,C.Model CarName,CT.Name CategoryName,CI.Name CityName from Announcments A
                                             LEFT JOIN Cars C ON C.Id = A.CarId
                                             LEFT JOIN Categories CT ON CT.Id = A.CategoryId
@@ -45,7 +44,7 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
                 throw ex;
             }
         }
-
+        
         public async Task<Announcement> GetById(int id)
         {
             try

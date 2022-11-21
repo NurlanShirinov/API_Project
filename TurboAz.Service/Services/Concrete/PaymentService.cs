@@ -22,13 +22,25 @@ namespace TurboAz.Service.Services.Concrete
         public async  Task<bool> Pay(CardNumber cardNumber, Email email)
         {
             var res = await _paymentRepository.Pay(cardNumber,email);
-
-            await _emailService.SendEmailAsync(new EmailRequest()
+            if (res)
             {
-                Body = "Aue",
-                Subject = "Salam",
-                ToEmail = "nurlan.shirinov1998@gmail.com"
-            });
+                await _emailService.SendEmailAsync(new EmailRequest()
+                {
+                    Body = "Succesfully accessed",
+                    Subject = "Payment succeed",
+                    ToEmail = email.EmailValue
+                });
+            }
+            else
+            {
+                await _emailService.SendEmailAsync(new EmailRequest()
+                {
+                    Body = "Accessed denied",
+                    Subject = "Payment failed",
+                    ToEmail = email.EmailValue
+                });
+            }
+           
             
             return res;
         }
