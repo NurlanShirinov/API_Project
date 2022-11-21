@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
+using TurboAz.Core.RequestsModels;
 using TurboAz.Repository.CQRS.Commands.Abstract;
 using TurboAz.Repository.CQRS.Queries.Abstract;
 using TurboAz.Repository.Repositories.Abstract;
@@ -29,7 +30,7 @@ namespace TurboAz.Repository.Repositories.Concrete
 
         public async Task<bool> DeleteCity(int id)
         {
-            var res =await _cityCommand.DeleteCity(id);
+            var res = await _cityCommand.DeleteCity(id);
             return res;
         }
 
@@ -47,7 +48,13 @@ namespace TurboAz.Repository.Repositories.Concrete
 
         public async Task<City> GetById(int id)
         {
-            var res =await _cityQuery.GetById(id);
+            var res = await _cityQuery.GetById(id);
+            return res;
+        }
+
+        public async Task<IEnumerable<City>> GetAllPaging(PagingModel model)
+        {
+            var res = await _cityQuery.GetAllPaging(model);
             return res;
         }
     }

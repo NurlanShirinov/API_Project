@@ -40,7 +40,6 @@ namespace TurboAz.Service.Services.Concrete
                     ToEmail = email.EmailValue
                 });
             }
-           
             
             return res;
         }

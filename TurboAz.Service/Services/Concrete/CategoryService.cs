@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
+using TurboAz.Core.RequestsModels;
 using TurboAz.Repository.Repositories.Abstract;
 using TurboAz.Service.Services.Abstract;
 
@@ -33,6 +34,13 @@ namespace TurboAz.Service.Services.Concrete
             var res = await _categoryRepository.GetAll();
             return res;
         }
+
+        public async Task<IEnumerable<Category>> GetAllPaging(PagingModel model)
+        {
+            var res = await _categoryRepository.GetAllPaging(model);
+            return res;
+        }
+
         public async Task<Category> GetById(int id)
         {
             var res = await _categoryRepository.GetById(id);

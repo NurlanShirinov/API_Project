@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
+using TurboAz.Core.RequestsModels;
 
 namespace TurboAz.Service.Services.Abstract
 {
@@ -13,7 +14,8 @@ namespace TurboAz.Service.Services.Abstract
         Task<City> GetById(int id);
         Task<int> AddCity(City city);
         Task<City> Update(City city);
-        Task<bool> Delete(int id); 
+        Task<bool> Delete(int id);
+        Task<IEnumerable<City>> GetAllPaging(PagingModel model);
 
     }
 }

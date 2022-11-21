@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TurboAz.Core.Models;
+using TurboAz.Core.RequestsModels;
 using TurboAz.Service.Services.Abstract;
 
 namespace TurboAz.API.Controllers
@@ -19,6 +20,13 @@ namespace TurboAz.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var res = await _categoryService.GetAll();
+            return Ok(res);
+        }
+
+        [HttpGet ("GettAllPaging")]
+        public  async Task<IActionResult> GetAlPaging([FromQuery]PagingModel model)
+        {
+            var res = await _categoryService.GetAllPaging(model);
             return Ok(res);
         }
 

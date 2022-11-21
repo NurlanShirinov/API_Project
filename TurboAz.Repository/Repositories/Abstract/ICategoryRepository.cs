@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
+using TurboAz.Core.RequestsModels;
 
 namespace TurboAz.Repository.Repositories.Abstract
 {
@@ -14,5 +15,6 @@ namespace TurboAz.Repository.Repositories.Abstract
         Task<Category> UpdateCategory(Category category);
         Task<Category> GetById(int id);
         Task<IEnumerable<Category>> GetAll();
+        Task<IEnumerable<Category>> GetAllPaging(PagingModel model);
     }
 }
