@@ -42,6 +42,13 @@ namespace TurboAz.Repository.Repositories.Concrete
             var res = await _announcementQuery.GetAll();
             return res;
         }
+
+        public async Task<IEnumerable<Announcement>> GetAllPaging(PagingModel model)
+        {
+            var res = await _announcementQuery.GetAllPagining(model);
+            return res;
+        }
+
         public async Task<Announcement> GetById(int id)
         {
             var res = await _announcementQuery.GetById(id);

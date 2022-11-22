@@ -17,7 +17,7 @@ namespace TurboAz.Repository.Repositories.Abstract
         Task<Announcement> GetById(int id);
         Task<IEnumerable<Announcement>> GetAll();
         Task SetVip(int announcmentId);
-
         Task<IEnumerable<AnnoncementResponseModel>> Filtered(GetFilteredDataRequestModel get);
+        Task<IEnumerable<Announcement>> GetAllPaging(PagingModel model);
     }
 }

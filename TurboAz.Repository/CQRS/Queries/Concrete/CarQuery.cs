@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
+using TurboAz.Core.RequestsModels;
 using TurboAz.Repository.CQRS.Queries.Abstract;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TurboAz.Repository.CQRS.Queries.Concrete
 {
@@ -21,6 +23,13 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
         private string _sqlGetAll = $@"SELECT * FROM CARS";
 
         private string _sqlGetById = $@"SELECT * FROM CARS WHERE Id=@id";
+
+        private string _sqlGetAllPaging = $@" Select C.[Model],C.[Vendor],C.[Id],C.[Color],C.[Year],C.[Price]
+                                              FROM CARS AS C
+                                              ORDER BY C.[Model] 
+                                              OFFSET @Offset ROWS
+                                              FETCH NEXT @Limit ROWS ONLY";
+
 
         public async Task<IEnumerable<Car>> GetAll()
         {
@@ -44,6 +53,27 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
                 var result = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<Car>(_sqlGetById, param, _unitOfWork.GetTransaction());
                 return result;
 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<Car>> GetAllPaging(PagingModel model)
+        {
+            int limit = (model.PageNumber-1)* model.RowOfPage;
+            int offset = model.RowOfPage;
+
+            try
+            {
+                var param = new
+                {
+                    limit,
+                    offset
+                };
+                var data = await _unitOfWork.GetConnection().QueryAsync<Car>(_sqlGetAllPaging,param,_unitOfWork.GetTransaction());
+                return data;
             }
             catch (Exception ex)
             {

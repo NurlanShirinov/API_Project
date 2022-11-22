@@ -14,5 +14,6 @@ namespace TurboAz.Repository.CQRS.Queries.Abstract
         Task<Announcement> GetById(int id); 
         Task<IEnumerable<Announcement>> GetAll(); 
         Task<IEnumerable<AnnoncementResponseModel>> Filtered(GetFilteredDataRequestModel get);
+        Task<IEnumerable<Announcement>> GetAllPagining(PagingModel model);
     }
 }

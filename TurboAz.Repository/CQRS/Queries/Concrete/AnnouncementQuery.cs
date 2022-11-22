@@ -11,7 +11,7 @@ using TurboAz.Repository.CQRS.Queries.Abstract;
 
 namespace TurboAz.Repository.CQRS.Queries.Concrete
 {
-    public class AnnouncementQuery: IAnnouncementQuery
+    public class AnnouncementQuery : IAnnouncementQuery
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -31,6 +31,12 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
 
         private string GetAllSql = "SELECT * FROM ANNOUNCMENTS";
 
+        private string GetAllPaginingSql = $@"SELECT  A.[CreatedDate], A.[Price], A.[ViewCount],A.[IsActive],A.[IsVip],A.[Expired],A.[Id],A.[CarId],A.[CityId]
+                                           FROM ANNOUNCMENTS AS A
+                                           ORDER BY A.[CreatedDate]
+                                           OFFSET @Offset ROWS
+                                           FETCH NEXT @Limit ROWS ONLY";
+
 
         public async Task<IEnumerable<Announcement>> GetAll()
         {
@@ -44,13 +50,13 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
                 throw ex;
             }
         }
-        
+
         public async Task<Announcement> GetById(int id)
         {
             try
             {
                 var param = new { id };
-                var result = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<Announcement>(GetByIdSql, param,_unitOfWork.GetTransaction());
+                var result = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<Announcement>(GetByIdSql, param, _unitOfWork.GetTransaction());
                 return result;
             }
             catch (Exception ex)
@@ -122,7 +128,7 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
             _filteredSql = _filteredSql += " 1=1";
 
             try
-            { 
+            {
                 var result = await _unitOfWork.GetConnection().QueryAsync<AnnoncementResponseModel>(_filteredSql, null, _unitOfWork.GetTransaction());
                 return result;
             }
@@ -131,6 +137,28 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
                 throw ex;
             }
 
+        }
+
+        public async Task<IEnumerable<Announcement>> GetAllPagining(PagingModel model)
+        {
+            int offset = (model.RowOfPage - 1) * model.PageNumber;
+            int limit = model.PageNumber;
+
+            try
+            {
+                var param = new
+                {
+                    offset,
+                    limit
+                };
+
+                var data = await _unitOfWork.GetConnection().QueryAsync<Announcement>(GetAllPaginingSql, param, _unitOfWork.GetTransaction());
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

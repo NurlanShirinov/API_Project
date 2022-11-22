@@ -18,5 +18,6 @@ namespace TurboAz.Service.Services.Abstract
         Task<IEnumerable<Announcement>> GetAll();
         Task SetVip(int announcmentId);
         Task<IEnumerable<AnnoncementResponseModel>> Filtered(GetFilteredDataRequestModel get);
+        Task<IEnumerable<Announcement>> GetAllPagining(PagingModel model);
     }
 }

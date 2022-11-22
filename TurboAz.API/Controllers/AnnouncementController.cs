@@ -27,6 +27,13 @@ namespace TurboAz.API.Controllers
             return Ok(res);
         }
 
+        [HttpGet("GetAllPagining")]
+        public async Task<IActionResult> GetAllPagining([FromQuery]PagingModel model)
+        {
+            var res = await _announcementService.GetAllPagining(model);
+            return Ok(res);
+        }
+
         [HttpGet("GetById")]
         public async Task<IActionResult> GetById([FromQuery] int id)
         {
