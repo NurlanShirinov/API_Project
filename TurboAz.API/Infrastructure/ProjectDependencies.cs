@@ -1,5 +1,7 @@
-﻿using NetCore.AutoRegisterDi;
+﻿using AspNetCoreRateLimit;
+using NetCore.AutoRegisterDi;
 using System.Reflection;
+using TurboAz.Core.Models;
 using TurboAz.Repository.Repositories.Concrete;
 using TurboAz.Service.Services.Abstract;
 using TurboAz.Service.Services.Concrete;
@@ -31,10 +33,18 @@ namespace TurboAz.API.Infrastructure
                 .Where(c => c.Name.EndsWith("Service"))
                 .AsPublicImplementedInterfaces(ServiceLifetime.Scoped);
 
-            services.AddSingleton<IUnitOfWork, UnitOfWork>();
+            services.AddSingleton<IUnitOfWork,UnitOfWork>();
             services.AddSingleton(typeof(IUnitOfWork1<>), typeof(UnitOfWork1<>));
-            services.AddTransient<IEmailService, EmailService>();
+            services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
 
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddMemoryCache();
+            services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateLimiting"));
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+            services.AddInMemoryRateLimiting();
 
             return services;
         }

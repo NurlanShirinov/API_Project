@@ -46,6 +46,10 @@ namespace TurboAz.Service.Services.Concrete
         public async Task<Car> GetById(int id)
         {
             var res = await _carRepository.GetById(id);
+            if(res is null)
+            {
+                throw new KeyNotFoundException($"Car not found with id : {id}");
+            }
             return res;
         }
 

@@ -37,6 +37,7 @@ namespace TurboAz.Repository.Repositories.Concrete
         public async Task<IEnumerable<Car>> GetAll()
         {
             var res = await _carQuery.GetAll();
+
             return res;
         }
 

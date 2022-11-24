@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TurboAz.Core.Models;
 using TurboAz.Core.RequestsModels;
 using TurboAz.Service.Services.Abstract;
+using static TurboAz.Service.DecoretorModels.Decorators;
 
 namespace TurboAz.API.Controllers
 {
@@ -19,6 +20,7 @@ namespace TurboAz.API.Controllers
 
 
         [HttpGet("GetAll")]
+        [LimitRequest(MaxRequests = 2, TimeWindow = 7)]
         public async Task<IActionResult> GetAll()
         {
             var res = await _carService.GetAll();
