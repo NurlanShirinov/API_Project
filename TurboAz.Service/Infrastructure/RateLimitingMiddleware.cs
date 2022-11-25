@@ -45,7 +45,6 @@ namespace TurboAz.Service.Infrastructure
             }
             await UpdateClientStatisticsAsync(key, rateLimitDecorator.MaxRequests);
             await _next(context);
-
         }
 
         /// <summary>
