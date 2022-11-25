@@ -2,6 +2,7 @@
 using NetCore.AutoRegisterDi;
 using System.Reflection;
 using TurboAz.Core.Models;
+using TurboAz.Repository.Infrustructure;
 using TurboAz.Repository.Repositories.Concrete;
 using TurboAz.Service.Services.Abstract;
 using TurboAz.Service.Services.Concrete;
@@ -35,6 +36,7 @@ namespace TurboAz.API.Infrastructure
 
             services.AddSingleton<IUnitOfWork,UnitOfWork>();
             services.AddSingleton(typeof(IUnitOfWork1<>), typeof(UnitOfWork1<>));
+            services.AddTransient<IUnitOfWorkAdoNet, UnitOfWorkAdoNet>();
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
 
             services.AddTransient<IEmailService, EmailService>();

@@ -1,12 +1,17 @@
 ﻿using Dapper;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
 using TurboAz.Core.RequestsModels;
 using TurboAz.Repository.CQRS.Queries.Abstract;
+using TurboAz.Repository.Infrustructure;
 
 namespace TurboAz.Repository.CQRS.Queries.Concrete
 {
@@ -14,10 +19,11 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
     {
 
         private readonly IUnitOfWork _unitOfWork;
-
-        public CityQuery(IUnitOfWork unitOfWork)
+        private readonly IUnitOfWorkAdoNet _unitOfWorkAdoNet;
+        public CityQuery(IUnitOfWork unitOfWork, IUnitOfWorkAdoNet unitOfWorkAdoNet)
         {
             _unitOfWork = unitOfWork;
+            _unitOfWorkAdoNet = unitOfWorkAdoNet;
         }
 
         private string getAllSql = $@"SElECT * FROM CITIES";
@@ -32,38 +38,80 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
 
         public async Task<IEnumerable<City>> GetAll()
         {
+            var conn = _unitOfWorkAdoNet.OpenConnection();
+            SqlDataReader reader = null;
+
             try
             {
-                var data = await _unitOfWork.GetConnection().QueryAsync<City>(getAllSql, null, _unitOfWork.GetTransaction());
+                #region Dapper
 
-                return data;
+                //var data = await _unitOfWork.GetConnection().QueryAsync<City>(getAllSql, null, _unitOfWork.GetTransaction());
+
+                //return data;
+                #endregion
+
+                #region Ado.NET
+                SqlCommand command = new SqlCommand(getAllSql, conn);
+
+                reader = await command.ExecuteReaderAsync();
+                var cityList = reader.Parse<City>();
+                cityList = cityList.Cast<City>().ToList();
+
+                return cityList;
+                #endregion
             }
             catch (Exception ex)
             {
-                throw ex;
+                Console.WriteLine(ex.Message);
+                return null;
             }
         }
 
         public async Task<City> GetById(int id)
         {
-            var param = new
-            {
-                id
-            };
+            var conn = _unitOfWorkAdoNet.OpenConnection();
+            SqlDataReader reader = null;
+
+            var param = new { id };
+
+
             try
             {
-                var result = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<City>(getByIdSql, param, _unitOfWork.GetTransaction());
-                return result;
+                #region Dapper
+                //var result = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<City>(getByIdSql, param, _unitOfWork.GetTransaction());
+                //return result;
+                #endregion
+
+                #region Ado.Net
+                SqlCommand command = new SqlCommand(getByIdSql, conn);
+
+                var paramId = new SqlParameter();
+                paramId.ParameterName = "@id";
+                paramId.SqlDbType = SqlDbType.Int;
+                paramId.Value = id;
+
+                command.Parameters.Add(paramId);
+
+                reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    id = reader.GetInt32(0);
+                    string cityName = reader.GetString(1);
+                    var newCity = new City { Id = id, Name = cityName};
+                    return newCity;
+                }
+                #endregion
             }
             catch (Exception ex)
             {
                 throw ex;
+                return null;
             }
+            return null;
         }
 
         public async Task<IEnumerable<City>> GetAllPaging(PagingModel model)
         {
-
             int offset = (model.PageNumber - 1) * model.RowOfPage;
             int limit = model.RowOfPage;
 
@@ -80,7 +128,6 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

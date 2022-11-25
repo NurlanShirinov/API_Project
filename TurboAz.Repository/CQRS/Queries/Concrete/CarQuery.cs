@@ -1,12 +1,14 @@
 ﻿using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
 using TurboAz.Core.RequestsModels;
 using TurboAz.Repository.CQRS.Queries.Abstract;
+using TurboAz.Repository.Infrustructure;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace TurboAz.Repository.CQRS.Queries.Concrete
@@ -14,10 +16,11 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
     public class CarQuery : ICarQuery
     {
         private readonly IUnitOfWork _unitOfWork;
-
-        public CarQuery(IUnitOfWork unitOfWork)
+        private readonly IUnitOfWorkAdoNet _unitOfWorkAdoNet;
+        public CarQuery(IUnitOfWork unitOfWork, IUnitOfWorkAdoNet unitOfWorkAdoNet)
         {
             _unitOfWork = unitOfWork;
+            _unitOfWorkAdoNet = unitOfWorkAdoNet;
         }
 
         private string _sqlGetAll = $@"SELECT * FROM CARS";
@@ -33,10 +36,24 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
 
         public async Task<IEnumerable<Car>> GetAll()
         {
+            var conn = _unitOfWorkAdoNet.OpenConnection();
+            SqlDataReader reader = null;
             try
             {
-                var result = await _unitOfWork.GetConnection().QueryAsync<Car>(_sqlGetAll, null, _unitOfWork.GetTransaction());
-                return result;
+                #region Dapper
+                //var result = await _unitOfWork.GetConnection().QueryAsync<Car>(_sqlGetAll, null, _unitOfWork.GetTransaction());
+                //return result;
+                #endregion
+
+                #region Ado.Net
+                SqlCommand command = new SqlCommand(_sqlGetAll, conn);
+                reader = await command.ExecuteReaderAsync();
+                var carList = reader.Parse<Car>();
+                carList = carList.Cast<Car>().ToList();
+                return carList;
+
+
+                #endregion
             }
             catch (Exception ex)
             {
@@ -45,7 +62,7 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
             }
         }
 
-       public async Task<Car> GetById(int id)
+        public async Task<Car> GetById(int id)
         {
             var param = new { id };
             try
@@ -62,7 +79,7 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
 
         public async Task<IEnumerable<Car>> GetAllPaging(PagingModel model)
         {
-            int limit = (model.PageNumber-1)* model.RowOfPage;
+            int limit = (model.PageNumber - 1) * model.RowOfPage;
             int offset = model.RowOfPage;
 
             try
@@ -72,7 +89,7 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
                     limit,
                     offset
                 };
-                var data = await _unitOfWork.GetConnection().QueryAsync<Car>(_sqlGetAllPaging,param,_unitOfWork.GetTransaction());
+                var data = await _unitOfWork.GetConnection().QueryAsync<Car>(_sqlGetAllPaging, param, _unitOfWork.GetTransaction());
                 return data;
             }
             catch (Exception ex)

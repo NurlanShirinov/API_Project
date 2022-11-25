@@ -1,11 +1,13 @@
 ﻿using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
 using TurboAz.Repository.CQRS.Commands.Abstract;
+using TurboAz.Repository.Infrustructure;
 using static Dapper.SqlMapper;
 
 namespace TurboAz.Repository.CQRS.Commands.Concrete
@@ -13,10 +15,11 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
     public class CityCommand : ICityCommand
     {
         private readonly IUnitOfWork _unitOfWork;
-
-        public CityCommand(IUnitOfWork unitOfWork)
+        private readonly IUnitOfWorkAdoNet _unitOfWorkAdoNet;
+        public CityCommand(IUnitOfWork unitOfWork, IUnitOfWorkAdoNet unitOfWorkAdoNet)
         {
             _unitOfWork = unitOfWork;
+            _unitOfWorkAdoNet = unitOfWorkAdoNet;
         }
 
         private string _addSql = $@"INSERT INTO CITIES(Id,[Name])
@@ -28,6 +31,7 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
                                        WHERE Id = @id";
 
         private string _deleteSql = $@"DELETE FROM CITIES WHERE Id = @id";
+
 
         public async Task<int> AddCity(City city)
         {
