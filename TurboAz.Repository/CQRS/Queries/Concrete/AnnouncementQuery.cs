@@ -115,6 +115,8 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
             }
 
 
+
+
             if (!String.IsNullOrWhiteSpace(model.Model))
             {
                 _filteredSql += $" C.Model LIKE '%{model.Model}%'  AND ";
