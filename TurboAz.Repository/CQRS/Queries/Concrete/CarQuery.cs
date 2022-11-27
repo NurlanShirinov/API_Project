@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -51,13 +52,10 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
                 var carList = reader.Parse<Car>();
                 carList = carList.Cast<Car>().ToList();
                 return carList;
-
-
                 #endregion
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -67,15 +65,44 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
             var param = new { id };
             try
             {
-                var result = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<Car>(_sqlGetById, param, _unitOfWork.GetTransaction());
-                return result;
+                var conn = _unitOfWorkAdoNet.OpenConnection();
+                SqlDataReader reader = null;
 
+                #region Dapper
+                //var result = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<Car>(_sqlGetById, param, _unitOfWork.GetTransaction());
+                //return result;
+                #endregion
+
+                #region AdoNet
+                SqlCommand command = new SqlCommand(_sqlGetById, conn);
+                var paramId = new SqlParameter();
+                paramId.ParameterName = "@id";
+                paramId.SqlDbType = SqlDbType.Int;
+                paramId.Value = id;
+                command.Parameters.Add(paramId);
+                reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    id = reader.GetInt32(0);
+                    string vendor = reader.GetString(2);
+                    string model = reader.GetString(1);
+                    int year = reader.GetInt32(4);
+                    int price = reader.GetInt32(5);
+                    string color = reader.GetString(3);
+
+                    var newCar = new Car { Id = id, Model = model, Vendor =vendor, Color = color, Year=year , Price = price ,};
+                    return newCar;
+                }
+                #endregion
             }
             catch (Exception ex)
             {
                 throw ex;
+                return null;
             }
+            return null;
         }
+
 
         public async Task<IEnumerable<Car>> GetAllPaging(PagingModel model)
         {
@@ -94,7 +121,6 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

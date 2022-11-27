@@ -14,7 +14,7 @@ namespace TurboAz.Service.Infrastructure
         public RateLimitingMiddleware(RequestDelegate next,
                                       IDistributedCache cache)
         {
-            this._next = next;
+            this._next = next;  
             this._cache = cache;
         }
 

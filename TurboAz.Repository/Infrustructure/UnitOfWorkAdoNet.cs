@@ -23,7 +23,6 @@ namespace TurboAz.Repository.Infrustructure
         public UnitOfWorkAdoNet( IConfiguration configuration)
         {
             _connection = new SqlConnection( configuration.GetConnectionString("DefaultConnection"));
-
         }
 
         public void CloseConnection(SqlConnection connection)
@@ -32,7 +31,6 @@ namespace TurboAz.Repository.Infrustructure
             {
                 connection.Close();
             }
-           
         }
 
         public SqlConnection GetConnection()
@@ -44,7 +42,7 @@ namespace TurboAz.Repository.Infrustructure
         {
             _connection.Open();
             return _connection;
-
         }
+
     }
 }

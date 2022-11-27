@@ -1,6 +1,8 @@
 ﻿using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,16 +10,20 @@ using TurboAz.Core.Models;
 using TurboAz.Core.RequestsModels;
 using TurboAz.Core.ResponseModels;
 using TurboAz.Repository.CQRS.Queries.Abstract;
+using TurboAz.Repository.Infrustructure;
 
 namespace TurboAz.Repository.CQRS.Queries.Concrete
 {
     public class AnnouncementQuery : IAnnouncementQuery
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWorkAdoNet _unitOfWorkAdoNet;
 
-        public AnnouncementQuery(IUnitOfWork unitOfWork)
+
+        public AnnouncementQuery(IUnitOfWork unitOfWork, IUnitOfWorkAdoNet unitOfWorkAdoNet)
         {
             _unitOfWork = unitOfWork;
+            _unitOfWorkAdoNet = unitOfWorkAdoNet;
         }
 
         private string _filteredSql = $@"SELECT A.*,C.Model CarName,CT.Name CategoryName,CI.Name CityName from Announcments A
@@ -40,10 +46,22 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
 
         public async Task<IEnumerable<Announcement>> GetAll()
         {
+            var conn = _unitOfWorkAdoNet.OpenConnection();
+            SqlDataReader reader = null;
             try
             {
-                var result = await _unitOfWork.GetConnection().QueryAsync<Announcement>(GetAllSql, null, _unitOfWork.GetTransaction());
-                return result;
+                #region Dapper
+                //var result = await _unitOfWork.GetConnection().QueryAsync<Announcement>(GetAllSql, null, _unitOfWork.GetTransaction());
+                //return result;
+                #endregion
+
+                #region Ado.Net
+                SqlCommand command = new SqlCommand(GetAllSql, conn);
+                reader = await command.ExecuteReaderAsync();
+                var announcementList = reader.Parse<Announcement>();
+                announcementList = announcementList.Cast<Announcement>().ToList();
+                return announcementList;
+                #endregion
             }
             catch (Exception ex)
             {
@@ -53,11 +71,34 @@ namespace TurboAz.Repository.CQRS.Queries.Concrete
 
         public async Task<Announcement> GetById(int id)
         {
+            var conn = _unitOfWorkAdoNet.OpenConnection();
+            SqlDataReader reader = null;
+            var param = new { id };
             try
             {
-                var param = new { id };
+                #region Dapper
                 var result = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<Announcement>(GetByIdSql, param, _unitOfWork.GetTransaction());
                 return result;
+                #endregion
+
+                #region Ado.Net
+                SqlCommand command = new SqlCommand(GetByIdSql, conn);
+
+                var paramId = new SqlParameter();
+                paramId.ParameterName = "@id";
+                paramId.SqlDbType = SqlDbType.Int;
+                paramId.Value = id;
+
+                command.Parameters.Add(paramId);
+
+                reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    id = reader.GetInt32(0);
+                    var newAnnouncement = new Announcement { Id = id };
+                    return newAnnouncement;
+                }
+                #endregion
             }
             catch (Exception ex)
             {
