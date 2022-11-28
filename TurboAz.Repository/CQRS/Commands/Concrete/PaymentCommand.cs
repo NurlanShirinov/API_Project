@@ -26,6 +26,7 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
         {
             try
             {
+
                 var param = new
                 {
                     email= email.EmailValue,
