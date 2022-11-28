@@ -44,6 +44,7 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
                 #region Dapper
                 //var result = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<int>(_sqlAdd, category, _unitOfWork.GetTransaction());
                 //return result;
+                //#endregion
                 #endregion
 
                 #region AdoNet
@@ -90,8 +91,6 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
                 command.ExecuteNonQuery();
                 return true;
                 #endregion
-
-
             }
             catch (Exception ex)
             {
@@ -99,7 +98,6 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
                 throw ex;
                 return false;
             }
-
         }
         public async Task<Category> UpdateCategory(Category category)
         {

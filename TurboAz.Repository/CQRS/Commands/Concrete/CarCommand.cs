@@ -24,9 +24,8 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
             _unitOfWorkAdoNet = unitOfWorkAdoNet;
         }
 
-        private string _addSql = $@"INSERT INTO CARS (Id,[Model],[Vendor],[Color],[Year],[Price])
-                                    VALUES (@{nameof(Car.Id)},
-                                            @{nameof(Car.Model)},
+        private string _addSql = $@"INSERT INTO CARS ([Model],[Vendor],[Color],[Year],[Price])
+                                    VALUES (@{nameof(Car.Model)},
                                             @{nameof(Car.Vendor)},
                                             @{nameof(Car.Color)},
                                             @{nameof(Car.Year)},
@@ -53,16 +52,13 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
                 #endregion
 
                 #region AdoNet
-                var command = new SqlCommand(_addSql,conn);
+                var command = new SqlCommand(_addSql, conn);
 
-                var paramId = new SqlParameter();
-                paramId.ParameterName = $"@{nameof(Car.Id)}";
-                paramId.SqlDbType = SqlDbType.Int;
-                paramId.Value= car.Id;
-                command.Parameters.Add(paramId);
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
 
                 var paramModel = new SqlParameter();
-                paramModel.ParameterName= $"@{nameof(Car.Model)}";
+                paramModel.ParameterName = $"@{nameof(Car.Model)}";
                 paramModel.SqlDbType = SqlDbType.NVarChar;
                 paramModel.Value = car.Model;
                 command.Parameters.Add(paramModel);
@@ -70,7 +66,29 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
                 var paramVendor = new SqlParameter();
                 paramVendor.ParameterName = $"@{nameof(Car.Vendor)}";
                 paramVendor.SqlDbType = SqlDbType.NVarChar;
+                paramVendor.Value = car.Vendor;
+                command.Parameters.Add(paramVendor);
 
+                var paramColor = new SqlParameter();
+                paramColor.ParameterName = $"@{nameof(Car.Color)}";
+                paramColor.SqlDbType = SqlDbType.NVarChar;
+                paramColor.Value = car.Color;
+                command.Parameters.Add(paramColor);
+
+                var paramYear = new SqlParameter();
+                paramYear.ParameterName = $"@{nameof(Car.Year)}";
+                paramYear.SqlDbType = SqlDbType.Int;
+                paramYear.Value = car.Year;
+                command.Parameters.Add(paramYear);
+
+                var paramPrice = new SqlParameter();
+                paramPrice.ParameterName = $"@{nameof(Car.Price)}";
+                paramPrice.SqlDbType = SqlDbType.Int;
+                paramPrice.Value = car.Price;
+                command.Parameters.Add(paramPrice);
+
+                var result = command.ExecuteNonQuery();
+                return result;
                 #endregion
             }
             catch (Exception ex)
@@ -81,11 +99,31 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
 
         public async Task<bool> DeleteCar(int id)
         {
+
+            var conn = _unitOfWorkAdoNet.GetConnection();
+
             try
             {
-                var param = new { id };
-                await _unitOfWork.GetConnection().QueryAsync(_deleteSql, param, _unitOfWork.GetTransaction());
+                #region Dapper
+                //var param = new { id };
+                //await _unitOfWork.GetConnection().QueryAsync(_deleteSql, param, _unitOfWork.GetTransaction());
+                //return true;
+                #endregion
+
+                #region AdoNet
+                var command = new SqlCommand(_deleteSql, conn);
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                var paramId = new SqlParameter();
+                paramId.ParameterName = "@id";
+                paramId.SqlDbType = SqlDbType.Int;
+                paramId.Value = id;
+                command.Parameters.Add(paramId);
+                command.ExecuteNonQuery();
                 return true;
+
+                #endregion
             }
             catch (Exception ex)
             {

@@ -1,27 +1,32 @@
 ﻿using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TurboAz.Core.Models;
 using TurboAz.Repository.CQRS.Commands.Abstract;
+using TurboAz.Repository.Infrustructure;
 
 namespace TurboAz.Repository.CQRS.Commands.Concrete
 {
     public class AnnouncementCommand : IAnnouncementCommand
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWorkAdoNet _unitOfWorkAdoNet;
 
-        public AnnouncementCommand(IUnitOfWork unitOfWork)
+        public AnnouncementCommand(IUnitOfWork unitOfWork, IUnitOfWorkAdoNet unitOfWorkAdoNet)
         {
             _unitOfWork = unitOfWork;
+            _unitOfWorkAdoNet = unitOfWorkAdoNet;
         }
-        
+
         private string _deleteSq = "DELETE FROM ANNOUNCMENTS WHERE Id=@id";
 
-        private string _addSql = $@"INSERT INTO ANNOUNCMENTS([CreatedDate],[Price],[ViewCount],[IsActive],[IsVip],[Expired],[Number],[CarId],[CityId],[CategoryId])
-                                 VALUES(@{nameof(Announcement.CreatedDate)},
+        private string _addSql = $@"INSERT INTO ANNOUNCMENTS([Price],[ViewCount],[IsActive],[IsVip],[Expired],[Number],[CarId],[CityId],[CategoryId])
+                                 VALUES(
                                         @{nameof(Announcement.Price)},
                                         @{nameof(Announcement.ViewCount)},
                                         @{nameof(Announcement.IsActive)},
@@ -50,10 +55,78 @@ namespace TurboAz.Repository.CQRS.Commands.Concrete
                                        WHERE Id=id";
         public async Task<int> Add(Announcement announcement)
         {
+            var conn = _unitOfWorkAdoNet.GetConnection();
             try
             {
-                var res = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<int>(_addSql, announcement, _unitOfWork.GetTransaction());
-                return res;
+                #region Dapper
+                //var res = await _unitOfWork.GetConnection().QueryFirstOrDefaultAsync<int>(_addSql, announcement, _unitOfWork.GetTransaction());
+                //return res;
+                #endregion
+
+                #region AdoNet
+                var command = new SqlCommand(_addSql, conn);
+
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                var paramPrice = new SqlParameter();
+                paramPrice.ParameterName = $"(@{nameof(Announcement.Price)}";
+                paramPrice.SqlDbType = SqlDbType.Int;
+                paramPrice.Value = announcement.Price;
+                command.Parameters.Add(paramPrice);
+
+                var paramView = new SqlParameter();
+                paramView.ParameterName = $"(@{nameof(Announcement.ViewCount)}";
+                paramView.SqlDbType = SqlDbType.Int;
+                paramView.Value = announcement.ViewCount;
+                command.Parameters.Add(paramView);
+
+                var paramActive = new SqlParameter();
+                paramActive.ParameterName = $"(@{nameof(Announcement.IsActive)}";
+                paramActive.SqlDbType = SqlDbType.Bit;
+                paramActive.Value = announcement.IsActive;
+                command.Parameters.Add(paramActive);
+
+                var paramVip = new SqlParameter();
+                paramVip.ParameterName = $"(@{nameof(Announcement.IsVip)}";
+                paramVip.SqlDbType = SqlDbType.Bit;
+                paramVip.Value = announcement.IsVip;
+                command.Parameters.Add(paramVip);
+
+                var paramExpired = new SqlParameter();
+                paramExpired.ParameterName = $"(@{nameof(Announcement.Expired)}";
+                paramExpired.SqlDbType = SqlDbType.DateTime2;
+                paramExpired.Value = announcement.Expired;
+                command.Parameters.Add(paramExpired);
+
+                var paramNumber = new SqlParameter();
+                paramNumber.ParameterName = $"(@{nameof(Announcement.Number)}";
+                paramNumber.SqlDbType = SqlDbType.Int;
+                paramNumber.Value = announcement.Number;
+                command.Parameters.Add(paramNumber);
+
+                var paramCarId = new SqlParameter();
+                paramCarId.ParameterName = $"(@{nameof(Announcement.CarId)}";
+                paramCarId.SqlDbType = SqlDbType.Int;
+                paramCarId.Value = announcement.CarId;
+                command.Parameters.Add(paramCarId);
+
+                var paramCityId = new SqlParameter();
+                paramCityId.ParameterName = $"(@{nameof(Announcement.CityId)}";
+                paramCityId.SqlDbType = SqlDbType.Int;
+                paramCityId.Value = announcement.CityId;
+                command.Parameters.Add(paramCityId);
+
+                var paramCategoryId = new SqlParameter();
+                paramCategoryId.ParameterName = $"(@{nameof(Announcement.CategoryId)}";
+                paramCategoryId.SqlDbType = SqlDbType.Int;
+                paramCategoryId.Value = announcement.CategoryId;
+                command.Parameters.Add(paramCategoryId);
+
+                var result = command.ExecuteNonQuery();
+                return result;
+
+                #endregion
             }
             catch (Exception ex)
             {
